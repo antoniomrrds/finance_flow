@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SharedKernel/SharedKernel.csproj" />
+    <Project Path="src/WebApi/WebApi.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TestUtilities/TestUtilities.csproj" />
+    <Project Path="tests/WebApi.Tests/WebApi.Tests.csproj" />
+  </Folder>
+</Solution>
