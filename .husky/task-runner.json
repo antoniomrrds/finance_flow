@@ -1,0 +1,50 @@
+{
+   "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
+  "tasks": [
+    {
+      "name": "format-csharpier",
+      "group": "pre-commit",
+      "description": "Format C# files with CSharpier",
+      "command": "dotnet",
+      "args": [
+        "tool",
+        "run",
+        "csharpier",
+        "format",     
+        "--",
+        "${staged}"
+      ],
+      "include": [
+        "**/*.cs"
+      ]
+    },
+    {
+      "name": "commit-message-linter",
+      "group": "commit-msg",
+      "description": "Validate commit message format",
+      "command": "dotnet",
+      "args": [
+        "tool",
+        "run",
+        "husky",
+        "exec",
+        ".husky/csx/commit-lint.csx",
+        "--args",
+        "${args}"
+      ]
+    },
+    {
+      "name": "run-tests",
+      "group": "pre-push",
+      "description": "Run all tests before push",
+      "command": "dotnet",
+      "args": [
+        "test",
+        "--verbosity",
+        "minimal",
+        "--no-restore"
+      ]
+    }
+  ]
+}
+
