@@ -1,3 +1,3 @@
-﻿namespace TestUtilities;
+namespace TestUtilities;
 
 public class Class1 { }
