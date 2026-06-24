@@ -8,9 +8,13 @@ internal sealed class Category
 
     public string? Description { get; private set; }
 
-    public Category(Guid id, string? description)
+    public Category(Guid id, string name, string? description)
     {
         Id = id;
+        Name = name;
         Description = description;
     }
+
+    // Required for Entity Framework core
+    private Category() { }
 }
