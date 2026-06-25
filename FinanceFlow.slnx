@@ -5,11 +5,13 @@
     <File Path=".editorconfig" />
   </Folder>
   <Folder Name="/src/">
+    <File Path="src/SrcSharedPackages.props" />
     <Project Path="src/SharedKernel/SharedKernel.csproj" />
     <Project Path="src/WebApi/WebApi.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <File Path="tests/TestSharedPackages.props" />
+    <Project Path="tests/SharedKernel.Tests/SharedKernel.Tests.csproj" />
     <Project Path="tests/TestUtilities/TestUtilities.csproj" />
     <Project Path="tests/WebApi.Tests/WebApi.Tests.csproj" />
   </Folder>
