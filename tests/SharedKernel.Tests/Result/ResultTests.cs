@@ -89,4 +89,17 @@ public class ResultTests
         result.IsSuccess.ShouldBeFalse();
         result.Error.ShouldBe(error);
     }
+
+    [Fact]
+    public void FailureReason_ShouldBeEqual_WhenSameValues()
+    {
+        // Arrange
+        var error1 = new FailureReason("Test.Code", "Test Description");
+        var error2 = new FailureReason("Test.Code", "Test Description");
+        var error3 = new FailureReason("Different.Code", "Different Description");
+
+        // Assert
+        error1.ShouldBe(error2);
+        error1.ShouldNotBe(error3);
+    }
 }
