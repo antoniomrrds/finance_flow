@@ -1,6 +1,6 @@
 namespace SharedKernel.Results;
 
-class Result
+public class Result
 {
     public bool IsSuccess { get; }
     public bool IsFailure => !IsSuccess;
@@ -8,8 +8,14 @@ class Result
 
     Result(bool isSuccess, FailureReason? error = null)
     {
-        Error = error ?? FailureReason.None;
+        error ??= FailureReason.None;
+        if (isSuccess && error != FailureReason.None || !isSuccess && error == FailureReason.None)
+        {
+            throw new ArgumentException("Invalid error", nameof(error));
+        }
+
         IsSuccess = isSuccess;
+        Error = error;
     }
 
     public static Result Success() => new(true);
