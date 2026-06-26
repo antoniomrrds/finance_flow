@@ -2,7 +2,7 @@ using WebApi.Domain.Categories;
 
 namespace WebApi.Tests.Domain.Categories;
 
-[Trait("Type", "Unit")]
+[Trait("Category", "Unit")]
 public class CategoryTests
 {
     // Method_GivenScenario_ShouldExpectedResult
@@ -17,6 +17,7 @@ public class CategoryTests
         sut.Id.ShouldBe(expected.Id);
         sut.Name.ShouldBe(expected.Name);
         sut.Description.ShouldBe(expected.Description);
+        sut.CreatedAt.ShouldNotBe(default);
     }
 
     [Fact]
