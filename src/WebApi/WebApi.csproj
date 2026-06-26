@@ -3,4 +3,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\SharedKernel\SharedKernel.csproj" />
+    </ItemGroup>
 </Project>

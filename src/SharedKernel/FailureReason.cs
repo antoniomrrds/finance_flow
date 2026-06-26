@@ -1,4 +1,4 @@
-namespace SharedKernel.Results;
+namespace SharedKernel;
 
 /// <summary>
 /// Representa um motivo de falha com código e descrição

@@ -1,15 +1,15 @@
-﻿using SharedKernel.Results;
+﻿namespace SharedKernel.Tests.Result;
 
-namespace SharedKernel.Tests.Result;
+using SharedKernel;
 
-[Trait("Type", "Unit")]
+[Trait("Result", "Unit")]
 public class ResultTests
 {
     //Method_Condition_Expected
     [Fact]
     public void Success_WithValidCall_ReturnsSuccessResult()
     {
-        var result = Results.Result.Success();
+        var result = Result.Success();
 
         result.IsSuccess.ShouldBeTrue();
         result.IsFailure.ShouldBeFalse();
@@ -21,7 +21,7 @@ public class ResultTests
         // Arrange
         var error = new FailureReason("Test.Error", "Test error");
         // Act
-        var result = Results.Result.Failure(error);
+        var result = Result.Failure(error);
         // Assert
         result.IsSuccess.ShouldBeFalse();
         result.IsFailure.ShouldBeTrue();
@@ -35,16 +35,16 @@ public class ResultTests
         FailureReason error = FailureReason.None;
 
         // Act & Assert
-        Should.Throw<ArgumentException>(() => Results.Result.Failure(error));
+        Should.Throw<ArgumentException>(() => SharedKernel.Result.Failure(error));
     }
 
     [Fact]
     public void Success_WithValue_ShouldReturnValue()
     {
         //Arrange
-        string expected = "Hello World";
+        const string expected = "Hello World";
         // Act
-        var result = Results.Result.Success(expected);
+        var result = Result.Success(expected);
         // Assert
         result.IsSuccess.ShouldBeTrue();
         result.Value.ShouldBe(expected);

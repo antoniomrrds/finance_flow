@@ -1,6 +1,7 @@
+
 using System.Diagnostics.CodeAnalysis;
 
-namespace SharedKernel.Results;
+namespace SharedKernel;
 
 /// <summary>
 /// Representa o resultado de uma operação que pode ser bem-sucedida ou falha
