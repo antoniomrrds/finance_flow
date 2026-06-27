@@ -30,10 +30,14 @@ internal sealed class CreateCategoryCommandHandler : ICommandHandler<CreateCateg
     )
     {
         var category = new Category(Guid.NewGuid(), command.Name, command.Description);
-        await _checkRepo.HasCategoryWithNameAsync(
+        bool hasCategory = await _checkRepo.HasCategoryWithNameAsync(
             name: category.Name,
             cancellationToken: cancellationToken
         );
+
+        if (hasCategory)
+            return CategoryErrors.NameAlreadyExists;
+
         await _writerRepo.AddAsync(category, cancellationToken);
         return category.Id;
     }

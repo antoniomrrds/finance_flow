@@ -2,7 +2,7 @@
 
 using SharedKernel;
 
-[Trait("Result", "Unit")]
+[Trait("Unit", "Results")]
 public class ResultTests
 {
     //Method_Condition_Expected

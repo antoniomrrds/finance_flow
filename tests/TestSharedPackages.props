@@ -6,6 +6,7 @@
         <PackageReference Include="Bogus" />
         <PackageReference Include="Shouldly" />
         <PackageReference Include="xunit" />
+        <PackageReference Include="NSubstitute" />
     </ItemGroup>
     <ItemGroup Condition="'$(IsTestProject)' == 'true'">
         <PackageReference Include="xunit.runner.visualstudio" />
@@ -17,6 +18,7 @@
         <Using Include="Xunit" />
         <using Include="Bogus" />
         <using Include="Shouldly" />
+        <using Include="NSubstitute" />
         <using Include="TestUtilities.Helpers" />
     </ItemGroup>
 </Project>

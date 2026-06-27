@@ -1,13 +1,11 @@
-using NSubstitute;
 using SharedKernel;
 using WebApi.Domain.Categories;
-using WebApi.Features.Categories;
 using WebApi.Features.Categories.Commands;
 using WebApi.Tests.Domain.Categories;
 
 namespace WebApi.Tests.Features.Categories.Commands;
 
-[Trait("Category", "Unit")]
+[Trait("Unit", "Category")]
 public class CreateCategoryCommandHandlerTests
 {
     readonly CreateCategoryCommandHandler _sut;
@@ -39,6 +37,19 @@ public class CreateCategoryCommandHandlerTests
         await _writerRepo.Received(1).AddAsync(Arg.Any<Category>(), _ct);
         result.IsSuccess.ShouldBeTrue();
         result.Value.ShouldNotBe(Guid.Empty);
+    }
+
+    [Fact]
+    public async Task Handle_WhenCategoryNameAlreadyExists_ReturnsFailure()
+    {
+        // Arrange
+        MakeHasCategoryWithNameAsyncReturns(true);
+        CreateCategoryCommand command = _category.ToCommand();
+        // Act
+        Result<Guid> result = await _sut.Handle(command, _ct);
+        // Assert
+        result.IsFailure.ShouldBeTrue();
+        result.Error.ShouldBe(CategoryErrors.NameAlreadyExists);
     }
 
     private void MakeHasCategoryWithNameAsyncReturns(bool returnValue)
