@@ -1,0 +1,38 @@
+* text=auto eol=lf
+
+# Arquivos binários
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.bmp binary
+*.webp binary
+
+# Ícones e fontes
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+
+# PDFs
+*.pdf binary
+
+# Arquivos compactados
+*.zip binary
+*.7z binary
+*.rar binary
+*.gz binary
+*.tar binary
+
+# Arquivos compilados
+*.dll binary
+*.exe binary
+*.pdb binary
+*.so binary
+*.dylib binary
+
+# Certificados
+*.pfx binary
+*.snk binary
