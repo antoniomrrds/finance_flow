@@ -1,5 +1,6 @@
 using SharedKernel;
 using WebApi.Domain.Categories;
+using WebApi.Domain.Ports;
 using WebApi.Messaging;
 
 namespace WebApi.Features.Categories.Commands;
@@ -12,16 +13,19 @@ public sealed record CreateCategoryCommand : ICommand<Guid>
 
 internal sealed class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryCommand, Guid>
 {
-    readonly ICategoryWriterRepository _writerRepo;
-    readonly ICategoryCheckRepository _checkRepo;
+    private readonly ICategoryWriterRepository _writerRepo;
+    private readonly ICategoryCheckRepository _checkRepo;
+    private readonly IUnitOfWork _uow;
 
     public CreateCategoryCommandHandler(
         ICategoryWriterRepository writerRepo,
-        ICategoryCheckRepository checkRepo
+        ICategoryCheckRepository checkRepo,
+        IUnitOfWork unitOfWork
     )
     {
         _writerRepo = writerRepo;
         _checkRepo = checkRepo;
+        _uow = unitOfWork;
     }
 
     public async Task<Result<Guid>> Handle(
@@ -39,6 +43,8 @@ internal sealed class CreateCategoryCommandHandler : ICommandHandler<CreateCateg
             return CategoryErrors.NameAlreadyExists;
 
         await _writerRepo.AddAsync(category, cancellationToken);
+
+        await _uow.SaveChangesAsync(cancellationToken);
         return category.Id;
     }
 }

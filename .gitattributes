@@ -36,3 +36,5 @@
 # Certificados
 *.pfx binary
 *.snk binary
+
+*.csproj text eol=lf

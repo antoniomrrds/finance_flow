@@ -1,6 +1,6 @@
 namespace WebApi.Domain.Categories;
 
-internal interface ICategoryWriterRepository
+public interface ICategoryWriterRepository
 {
     Task<Guid> AddAsync(Category category, CancellationToken cancellationToken = default);
 }
