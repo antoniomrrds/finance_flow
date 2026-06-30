@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using WebApi.Infrastructure;
+using WebApi.Infrastructure.Data;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +9,7 @@ builder.Services.AddAuthorization();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 WebApplication app = builder.Build();
 
@@ -15,6 +20,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapGet("/", () => "Hello World");
+
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
 
 app.UseHttpsRedirection();
 app.Run();

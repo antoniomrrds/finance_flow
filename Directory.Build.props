@@ -14,5 +14,6 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <NuGetAuditLevel>critical</NuGetAuditLevel>
     </PropertyGroup>
 </Project>

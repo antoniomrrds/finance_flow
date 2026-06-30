@@ -7,9 +7,5 @@ public interface ICategoryWriterRepository
 
 public interface ICategoryCheckRepository
 {
-    Task<bool> HasCategoryWithNameAsync(
-        string name,
-        Guid? excludeId = null,
-        CancellationToken cancellationToken = default
-    );
+    Task<bool> HasCategoryWithNameAsync(string name, CancellationToken cancellationToken = default);
 }

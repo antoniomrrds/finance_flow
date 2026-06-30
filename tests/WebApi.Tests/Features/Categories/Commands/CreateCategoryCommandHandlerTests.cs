@@ -36,7 +36,7 @@ public class CreateCategoryCommandHandlerTests
         // Act
         Result<Guid> result = await _sut.Handle(command, _ct);
         // Assert
-        await _checkRepo.Received(1).HasCategoryWithNameAsync(command.Name, Arg.Any<Guid?>(), _ct);
+        await _checkRepo.Received(1).HasCategoryWithNameAsync(command.Name, _ct);
         await _writerRepo.Received(1).AddAsync(Arg.Any<Category>(), _ct);
         await _uow.Received(1).SaveChangesAsync(_ct);
         result.IsSuccess.ShouldBeTrue();
@@ -58,8 +58,6 @@ public class CreateCategoryCommandHandlerTests
 
     private void MakeHasCategoryWithNameAsyncReturns(bool returnValue)
     {
-        _checkRepo
-            .HasCategoryWithNameAsync(_category.Name, Arg.Any<Guid?>(), _ct)
-            .Returns(returnValue);
+        _checkRepo.HasCategoryWithNameAsync(_category.Name, _ct).Returns(returnValue);
     }
 }
