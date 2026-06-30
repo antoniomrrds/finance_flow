@@ -23,6 +23,6 @@ public static class DependencyInjection
 
     // private static void RegisterRepositories(IServiceCollection services)
     // {
-    //     services.AddScoped<ICategoryCheckRepository,CategoryCheckRepository>();
+    //     services.AddScoped<ICategoryReaderRepository,CategoryCheckRepository>();
     // }
 }

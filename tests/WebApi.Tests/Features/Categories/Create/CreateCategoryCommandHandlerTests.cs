@@ -1,10 +1,10 @@
 using SharedKernel;
 using WebApi.Domain.Categories;
 using WebApi.Domain.Ports;
-using WebApi.Features.Categories.Commands;
+using WebApi.Features.Categories.Create;
 using WebApi.Tests.Domain.Categories;
 
-namespace WebApi.Tests.Features.Categories.Commands;
+namespace WebApi.Tests.Features.Categories.Create;
 
 [Trait("Unit", "Category")]
 public class CreateCategoryCommandHandlerTests
@@ -12,7 +12,7 @@ public class CreateCategoryCommandHandlerTests
     private readonly CreateCategoryCommandHandler _sut;
     private readonly Category _category;
     private readonly ICategoryWriterRepository _writerRepo;
-    private readonly ICategoryCheckRepository _checkRepo;
+    private readonly ICategoryReaderRepository _readerRepo;
     private readonly CancellationToken _ct = CancellationToken.None;
     private readonly IUnitOfWork _uow;
 
@@ -20,10 +20,10 @@ public class CreateCategoryCommandHandlerTests
     {
         _category = CategoryFixture.GetCategory();
         _writerRepo = Substitute.For<ICategoryWriterRepository>();
-        _checkRepo = Substitute.For<ICategoryCheckRepository>();
+        _readerRepo = Substitute.For<ICategoryReaderRepository>();
         _uow = Substitute.For<IUnitOfWork>();
 
-        _sut = new CreateCategoryCommandHandler(_writerRepo, _checkRepo, _uow);
+        _sut = new CreateCategoryCommandHandler(_writerRepo, _readerRepo, _uow);
     }
 
     //Method_Condition_Expected
@@ -36,7 +36,7 @@ public class CreateCategoryCommandHandlerTests
         // Act
         Result<Guid> result = await _sut.Handle(command, _ct);
         // Assert
-        await _checkRepo.Received(1).HasCategoryWithNameAsync(command.Name, _ct);
+        await _readerRepo.Received(1).HasCategoryWithNameAsync(command.Name, _ct);
         await _writerRepo.Received(1).AddAsync(Arg.Any<Category>(), _ct);
         await _uow.Received(1).SaveChangesAsync(_ct);
         result.IsSuccess.ShouldBeTrue();
@@ -58,6 +58,6 @@ public class CreateCategoryCommandHandlerTests
 
     private void MakeHasCategoryWithNameAsyncReturns(bool returnValue)
     {
-        _checkRepo.HasCategoryWithNameAsync(_category.Name, _ct).Returns(returnValue);
+        _readerRepo.HasCategoryWithNameAsync(_category.Name, _ct).Returns(returnValue);
     }
 }

@@ -3,7 +3,7 @@ using WebApi.Domain.Categories;
 using WebApi.Domain.Ports;
 using WebApi.Messaging;
 
-namespace WebApi.Features.Categories.Commands;
+namespace WebApi.Features.Categories.Create;
 
 public sealed record CreateCategoryCommand : ICommand<Guid>
 {
@@ -14,17 +14,17 @@ public sealed record CreateCategoryCommand : ICommand<Guid>
 internal sealed class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryCommand, Guid>
 {
     private readonly ICategoryWriterRepository _writerRepo;
-    private readonly ICategoryCheckRepository _checkRepo;
+    private readonly ICategoryReaderRepository _readerRepo;
     private readonly IUnitOfWork _uow;
 
     public CreateCategoryCommandHandler(
         ICategoryWriterRepository writerRepo,
-        ICategoryCheckRepository checkRepo,
+        ICategoryReaderRepository readerRepo,
         IUnitOfWork unitOfWork
     )
     {
         _writerRepo = writerRepo;
-        _checkRepo = checkRepo;
+        _readerRepo = readerRepo;
         _uow = unitOfWork;
     }
 
@@ -34,7 +34,7 @@ internal sealed class CreateCategoryCommandHandler : ICommandHandler<CreateCateg
     )
     {
         var category = new Category(Guid.NewGuid(), command.Name, command.Description);
-        bool hasCategory = await _checkRepo.HasCategoryWithNameAsync(
+        bool hasCategory = await _readerRepo.HasCategoryWithNameAsync(
             name: category.Name,
             cancellationToken: cancellationToken
         );

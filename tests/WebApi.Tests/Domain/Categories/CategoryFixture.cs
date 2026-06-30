@@ -1,6 +1,6 @@
 using TestUtilities.Helpers;
 using WebApi.Domain.Categories;
-using WebApi.Features.Categories.Commands;
+using WebApi.Features.Categories.Create;
 
 namespace WebApi.Tests.Domain.Categories;
 

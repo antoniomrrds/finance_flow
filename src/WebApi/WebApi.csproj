@@ -13,6 +13,5 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Infrastructure\EntityConfigurations\" />
-      <Folder Include="Infrastructure\Repositories\" />
     </ItemGroup>
 </Project>
