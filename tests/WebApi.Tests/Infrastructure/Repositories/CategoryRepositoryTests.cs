@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebApi.Domain.Categories;
+using WebApi.Features.Categories.Create;
 using WebApi.Infrastructure.Data;
 using WebApi.Infrastructure.Repositories;
 using WebApi.Tests.Domain.Categories;
@@ -7,7 +8,6 @@ using WebApi.Tests.Infrastructure.Factories;
 
 namespace WebApi.Tests.Infrastructure.Repositories;
 
-[Trait("Integration", "category")]
 public class CategoryRepositoryTests
 {
     private readonly CategoryRepository _sut;
@@ -28,6 +28,7 @@ public class CategoryRepositoryTests
     }
 
     [Fact]
+    [Trait("Feature", nameof(CreateCategory))]
     public async Task HasCategoryWithNameAsync_WhenTheNameDoesNotExist_ShouldReturnFalse()
     {
         //Arrange & Act
@@ -37,6 +38,7 @@ public class CategoryRepositoryTests
     }
 
     [Fact]
+    [Trait("Feature", nameof(CreateCategory))]
     public async Task HasCategoryWithNameAsync_WhenNameAlreadyExists_ShouldReturnTrue()
     {
         // Arrange
@@ -48,14 +50,14 @@ public class CategoryRepositoryTests
     }
 
     [Fact]
+    [Trait("Feature", nameof(CreateCategory))]
     public async Task AddAsync_WhenCategoryIsValid_ShouldPersistCategory()
     {
-        //Arrange 
+        //Arrange
         await _sut.AddAsync(_category);
         await _db.SaveChangesAsync();
         //Act
-        Category? saved = await _db.Categories.FirstOrDefaultAsync(c => c.Id == _category.Id
-        );
+        Category? saved = await _db.Categories.FirstOrDefaultAsync(c => c.Id == _category.Id);
 
         // Assert
         saved.ShouldNotBeNull();

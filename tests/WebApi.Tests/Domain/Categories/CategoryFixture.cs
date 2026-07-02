@@ -29,6 +29,6 @@ internal static class CategoryFixture
 
 internal static class CategoryExtensions
 {
-    internal static CreateCategoryCommand ToCommand(this Category category) =>
+    internal static CreateCategory.Command ToCommand(this Category category) =>
         new() { Name = category.Name, Description = category.Description ?? string.Empty };
 }

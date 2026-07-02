@@ -6,22 +6,25 @@ using WebApi.Tests.Domain.Categories;
 
 namespace WebApi.Tests.Features.Categories.Create;
 
-[Trait("Unit", "Category")]
-public class CreateCategoryCommandHandlerTests
+
+[Trait("Feature", nameof(CreateCategory))]
+public class CreateCategoryHandlerTests
 {
-    private readonly CreateCategoryCommandHandler _sut;
+    private readonly CreateCategory.CreateCategoryHandler _sut;
     private readonly Category _category;
+    private readonly CreateCategory.Command _command;
     private readonly ICategoryRepository _repo;
     private readonly CancellationToken _ct = CancellationToken.None;
     private readonly IUnitOfWork _uow;
 
-    public CreateCategoryCommandHandlerTests()
+    public CreateCategoryHandlerTests()
     {
         _category = CategoryFixture.GetCategory();
+        _command = CategoryFixture.GetCategory().ToCommand();
         _repo = Substitute.For<ICategoryRepository>();
         _uow = Substitute.For<IUnitOfWork>();
 
-        _sut = new CreateCategoryCommandHandler(_repo, _uow);
+        _sut = new CreateCategory.CreateCategoryHandler(_repo, _uow);
     }
 
     //Method_Condition_Expected
@@ -30,11 +33,10 @@ public class CreateCategoryCommandHandlerTests
     {
         // Arrange
         MakeHasCategoryWithNameAsyncReturns(false);
-        CreateCategoryCommand command = _category.ToCommand();
         // Act
-        Result<Guid> result = await _sut.Handle(command, _ct);
+        Result<Guid> result = await _sut.Handle(_command, _ct);
         // Assert
-        await _repo.Received(1).HasCategoryWithNameAsync(command.Name, _ct);
+        await _repo.Received(1).HasCategoryWithNameAsync(_command.Name, _ct);
         await _repo.Received(1).AddAsync(Arg.Any<Category>(), _ct);
         await _uow.Received(1).SaveChangesAsync(_ct);
         result.IsSuccess.ShouldBeTrue();
@@ -46,9 +48,8 @@ public class CreateCategoryCommandHandlerTests
     {
         // Arrange
         MakeHasCategoryWithNameAsyncReturns(true);
-        CreateCategoryCommand command = _category.ToCommand();
         // Act
-        Result<Guid> result = await _sut.Handle(command, _ct);
+        Result<Guid> result = await _sut.Handle(_command, _ct);
         // Assert
         result.IsFailure.ShouldBeTrue();
         result.Error.ShouldBe(CategoryErrors.NameAlreadyExists);
