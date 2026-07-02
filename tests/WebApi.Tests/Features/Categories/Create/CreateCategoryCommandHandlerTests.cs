@@ -11,19 +11,17 @@ public class CreateCategoryCommandHandlerTests
 {
     private readonly CreateCategoryCommandHandler _sut;
     private readonly Category _category;
-    private readonly ICategoryWriterRepository _writerRepo;
-    private readonly ICategoryReaderRepository _readerRepo;
+    private readonly ICategoryRepository _repo;
     private readonly CancellationToken _ct = CancellationToken.None;
     private readonly IUnitOfWork _uow;
 
     public CreateCategoryCommandHandlerTests()
     {
         _category = CategoryFixture.GetCategory();
-        _writerRepo = Substitute.For<ICategoryWriterRepository>();
-        _readerRepo = Substitute.For<ICategoryReaderRepository>();
+        _repo = Substitute.For<ICategoryRepository>();
         _uow = Substitute.For<IUnitOfWork>();
 
-        _sut = new CreateCategoryCommandHandler(_writerRepo, _readerRepo, _uow);
+        _sut = new CreateCategoryCommandHandler(_repo, _uow);
     }
 
     //Method_Condition_Expected
@@ -36,8 +34,8 @@ public class CreateCategoryCommandHandlerTests
         // Act
         Result<Guid> result = await _sut.Handle(command, _ct);
         // Assert
-        await _readerRepo.Received(1).HasCategoryWithNameAsync(command.Name, _ct);
-        await _writerRepo.Received(1).AddAsync(Arg.Any<Category>(), _ct);
+        await _repo.Received(1).HasCategoryWithNameAsync(command.Name, _ct);
+        await _repo.Received(1).AddAsync(Arg.Any<Category>(), _ct);
         await _uow.Received(1).SaveChangesAsync(_ct);
         result.IsSuccess.ShouldBeTrue();
         result.Value.ShouldNotBe(Guid.Empty);
@@ -58,6 +56,6 @@ public class CreateCategoryCommandHandlerTests
 
     private void MakeHasCategoryWithNameAsyncReturns(bool returnValue)
     {
-        _readerRepo.HasCategoryWithNameAsync(_category.Name, _ct).Returns(returnValue);
+        _repo.HasCategoryWithNameAsync(_category.Name, _ct).Returns(returnValue);
     }
 }

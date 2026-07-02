@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using WebApi.Domain.Categories;
+using WebApi.Domain.Ports;
 using WebApi.Infrastructure.Data;
+using WebApi.Infrastructure.Repositories;
 
 namespace WebApi.Infrastructure;
 
@@ -16,13 +19,13 @@ public static class DependencyInjection
                 "Connection string 'DefaultConnection' not found."
             );
         services.AddDbContext<AppDbContext>(o => o.UseNpgsql(connectionString));
-
-        // RegisterRepositories(services);
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<AppDbContext>());
+        RegisterRepositories(services);
         return services;
     }
 
-    // private static void RegisterRepositories(IServiceCollection services)
-    // {
-    //     services.AddScoped<ICategoryReaderRepository,CategoryCheckRepository>();
-    // }
+    private static void RegisterRepositories(IServiceCollection services)
+    {
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+    }
 }

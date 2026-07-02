@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WebApi.Domain.Categories;
 using WebApi.Infrastructure.Data;
 using WebApi.Infrastructure.Repositories;
@@ -7,17 +8,17 @@ using WebApi.Tests.Infrastructure.Factories;
 namespace WebApi.Tests.Infrastructure.Repositories;
 
 [Trait("Integration", "category")]
-public class CategoryReaderRepositoryTests
+public class CategoryRepositoryTests
 {
-    private readonly CategoryReaderRepository _sut;
+    private readonly CategoryRepository _sut;
     private readonly Category _category;
     private readonly AppDbContext _db;
 
-    public CategoryReaderRepositoryTests()
+    public CategoryRepositoryTests()
     {
         _category = CategoryFixture.GetCategory(true);
         _db = TestDbFactory.Create();
-        _sut = new CategoryReaderRepository(_db);
+        _sut = new CategoryRepository(_db);
     }
 
     private async Task AddCategory()
@@ -44,5 +45,21 @@ public class CategoryReaderRepositoryTests
         bool nameExists = await _sut.HasCategoryWithNameAsync(_category.Name);
         // Assert
         nameExists.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task AddAsync_WhenCategoryIsValid_ShouldPersistCategory()
+    {
+        //Arrange 
+        await _sut.AddAsync(_category);
+        await _db.SaveChangesAsync();
+        //Act
+        Category? saved = await _db.Categories.FirstOrDefaultAsync(c => c.Id == _category.Id
+        );
+
+        // Assert
+        saved.ShouldNotBeNull();
+        saved.Name.ShouldBe(_category.Name);
+        saved.Id.ShouldNotBe(Guid.Empty);
     }
 }

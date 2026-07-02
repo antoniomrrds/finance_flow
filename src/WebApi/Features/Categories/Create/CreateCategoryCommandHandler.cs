@@ -13,18 +13,12 @@ public sealed record CreateCategoryCommand : ICommand<Guid>
 
 internal sealed class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryCommand, Guid>
 {
-    private readonly ICategoryWriterRepository _writerRepo;
-    private readonly ICategoryReaderRepository _readerRepo;
+    private readonly ICategoryRepository _repo;
     private readonly IUnitOfWork _uow;
 
-    public CreateCategoryCommandHandler(
-        ICategoryWriterRepository writerRepo,
-        ICategoryReaderRepository readerRepo,
-        IUnitOfWork unitOfWork
-    )
+    public CreateCategoryCommandHandler(ICategoryRepository repo, IUnitOfWork unitOfWork)
     {
-        _writerRepo = writerRepo;
-        _readerRepo = readerRepo;
+        _repo = repo;
         _uow = unitOfWork;
     }
 
@@ -34,7 +28,7 @@ internal sealed class CreateCategoryCommandHandler : ICommandHandler<CreateCateg
     )
     {
         var category = new Category(Guid.NewGuid(), command.Name, command.Description);
-        bool hasCategory = await _readerRepo.HasCategoryWithNameAsync(
+        bool hasCategory = await _repo.HasCategoryWithNameAsync(
             name: category.Name,
             cancellationToken: cancellationToken
         );
@@ -42,7 +36,7 @@ internal sealed class CreateCategoryCommandHandler : ICommandHandler<CreateCateg
         if (hasCategory)
             return CategoryErrors.NameAlreadyExists;
 
-        await _writerRepo.AddAsync(category, cancellationToken);
+        await _repo.AddAsync(category, cancellationToken);
 
         await _uow.SaveChangesAsync(cancellationToken);
         return category.Id;
