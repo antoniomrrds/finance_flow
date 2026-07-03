@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
-using WebApi.Infrastructure.Data;
-using WebApi.Infrastructure.Repositories;
+using WebApi.Infrastructure.Persistence.Data;
+using WebApi.Infrastructure.Persistence.Repositories;
 using WebApi.Tests.Domain.Categories;
 using WebApi.Tests.Infrastructure.Factories;
 

@@ -1,4 +1,4 @@
-namespace WebApi.Messaging;
+namespace WebApi.Application.Abstractions.Messaging;
 
 public interface ICommand;
 

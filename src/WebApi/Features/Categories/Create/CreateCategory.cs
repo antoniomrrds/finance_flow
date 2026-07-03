@@ -1,8 +1,11 @@
 using SharedKernel;
+using WebApi.Application.Abstractions.Messaging;
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Categories;
-using WebApi.Domain.Ports;
+using WebApi.Endpoints;
+using WebApi.Extensions;
 using WebApi.Features.Categories.Common;
-using WebApi.Messaging;
+using WebApi.Infrastructure.Http;
 
 namespace WebApi.Features.Categories.Create;
 
@@ -12,7 +15,27 @@ public static class CreateCategory
 
     public class CreateCategoryValidator : CommonCategoryValidator<Command>;
 
-    internal sealed class CreateCategoryHandler : ICommandHandler<Command, Guid>
+    public sealed class Endpoint : IEndpoint<CategoryGroup>
+    {
+        public void MapEndpoint(IEndpointRouteBuilder app)
+        {
+            app.MapPost(
+                "/",
+                async (
+                    Command command,
+                    ICommandHandler<Command, Guid> handler,
+                    CancellationToken cancellationToken
+                ) =>
+                {
+                    Result<Guid> result = await handler.Handle(command, cancellationToken);
+
+                    return result.Match(Results.Ok, CustomProblemResults.Problem);
+                }
+            );
+        }
+    }
+
+    internal class CreateCategoryHandler : ICommandHandler<Command, Guid>
     {
         private readonly ICategoryRepository _repo;
         private readonly IUnitOfWork _uow;

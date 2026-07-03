@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WebApi.Domain.Categories;
 
-namespace WebApi.Infrastructure.EntityConfigurations;
+namespace WebApi.Infrastructure.Persistence.EntityConfigurations;
 
 public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {

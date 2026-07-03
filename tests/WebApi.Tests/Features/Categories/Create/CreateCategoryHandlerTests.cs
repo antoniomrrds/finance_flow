@@ -1,11 +1,10 @@
 using SharedKernel;
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Categories;
-using WebApi.Domain.Ports;
 using WebApi.Features.Categories.Create;
 using WebApi.Tests.Domain.Categories;
 
 namespace WebApi.Tests.Features.Categories.Create;
-
 
 [Trait("Feature", nameof(CreateCategory))]
 public class CreateCategoryHandlerTests

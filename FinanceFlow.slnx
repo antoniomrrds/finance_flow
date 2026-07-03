@@ -12,7 +12,6 @@
   </Folder>
   <Folder Name="/tests/">
     <File Path="tests/TestSharedPackages.props" />
-    <Project Path="tests/SharedKernel.Tests/SharedKernel.Tests.csproj" />
     <Project Path="tests/TestUtilities/TestUtilities.csproj" />
     <Project Path="tests/WebApi.Tests/WebApi.Tests.csproj" />
   </Folder>

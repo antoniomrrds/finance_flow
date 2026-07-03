@@ -1,4 +1,4 @@
-namespace WebApi.Domain.Ports;
+namespace WebApi.Domain.Abstractions;
 
 public interface IUnitOfWork
 {

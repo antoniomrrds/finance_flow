@@ -1,6 +1,6 @@
 using SharedKernel;
 
-namespace WebApi.Messaging;
+namespace WebApi.Application.Abstractions.Messaging;
 
 internal interface IQueryHandler<in TQuery, TResponse>
     where TQuery : IQuery<TResponse>

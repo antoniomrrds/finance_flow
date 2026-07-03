@@ -1,6 +1,12 @@
-using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using Asp.Versioning;
+using Asp.Versioning.Builder;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using WebApi.Application;
+using WebApi.Endpoints;
+using WebApi.Extensions;
 using WebApi.Infrastructure;
-using WebApi.Infrastructure.Data;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -9,23 +15,53 @@ builder.Services.AddAuthorization();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddInfrastructure(builder.Configuration);
+
+builder
+    .Services.AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new ApiVersion(1);
+        options.ReportApiVersions = true;
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ApiVersionReader = ApiVersionReader.Combine(
+            new UrlSegmentApiVersionReader(),
+            new HeaderApiVersionReader("X-Api-Version")
+        );
+    })
+    .AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'V";
+        options.SubstituteApiVersionInUrl = true;
+    });
+
+builder.Services.AddInfrastructure(builder.Configuration).AddApplication();
+
+builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 WebApplication app = builder.Build();
+
+ApiVersionSet versionSet = app.NewApiVersionSet()
+    .HasApiVersion(new ApiVersion(1))
+    .ReportApiVersions()
+    .Build();
+
+RouteGroupBuilder api = app.MapGroup("/api/v{version:apiVersion}").WithApiVersionSet(versionSet);
+
+app.MapEndpoints(api);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.ApplyMigrations();
 }
 
 app.MapGet("/", () => "Hello World");
 
-using (IServiceScope scope = app.Services.CreateScope())
-{
-    AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
-}
+app.MapHealthChecks(
+    "health",
+    new HealthCheckOptions { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse }
+);
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
-app.Run();
+await app.RunAsync();

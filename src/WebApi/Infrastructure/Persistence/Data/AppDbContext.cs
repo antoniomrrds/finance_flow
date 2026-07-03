@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Categories;
-using WebApi.Domain.Ports;
 
-namespace WebApi.Infrastructure.Data;
+namespace WebApi.Infrastructure.Persistence.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IUnitOfWork
 {

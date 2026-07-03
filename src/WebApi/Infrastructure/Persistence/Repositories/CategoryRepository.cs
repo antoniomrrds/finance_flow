@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using WebApi.Domain.Categories;
-using WebApi.Infrastructure.Data;
+using WebApi.Infrastructure.Persistence.Data;
 
-namespace WebApi.Infrastructure.Repositories;
+namespace WebApi.Infrastructure.Persistence.Repositories;
 
 public class CategoryRepository(AppDbContext db) : ICategoryRepository
 {

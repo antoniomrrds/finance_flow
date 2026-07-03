@@ -1,6 +1,6 @@
 using SharedKernel;
 
-namespace WebApi.Messaging;
+namespace WebApi.Application.Abstractions.Messaging;
 
 public interface ICommandHandler<in TCommand>
     where TCommand : ICommand

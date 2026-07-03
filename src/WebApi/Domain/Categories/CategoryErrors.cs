@@ -12,9 +12,12 @@ static class CategoryErrorCodes
 public static class CategoryErrors
 {
     public static FailureReason NotFound(string id) =>
-        new(CategoryErrorCodes.NotFound, $"A categoria com o id: '{id}' não foi encontrada.");
+        FailureReason.NotFound(
+            CategoryErrorCodes.NotFound,
+            $"A categoria com o id: '{id}' não foi encontrada."
+        );
 
-    public static readonly FailureReason NameAlreadyExists = new(
+    public static readonly FailureReason NameAlreadyExists = FailureReason.Problem(
         CategoryErrorCodes.NameAlreadyExists,
         "Uma categoria com o nome fornecido já existe."
     );
