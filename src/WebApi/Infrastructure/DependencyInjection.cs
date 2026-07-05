@@ -1,9 +1,7 @@
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Application.Abstractions.Behaviors;
-using WebApi.Application.Abstractions.Messaging;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Categories;
+using WebApi.Extensions.Docs;
 using WebApi.Infrastructure.Http;
 using WebApi.Infrastructure.Persistence.Data;
 using WebApi.Infrastructure.Persistence.Repositories;
@@ -18,9 +16,9 @@ public static class DependencyInjection
     )
     {
         services
-            .AddPresentation()
             .AddDatabase(configuration)
             .AddHealthChecks(configuration)
+            .AddPresentation()
             .RegisterRepositories();
 
         return services;
@@ -33,7 +31,7 @@ public static class DependencyInjection
     {
         services
             .AddHealthChecks()
-            .AddNpgSql(configuration.GetConnectionString("DefaultConnection")!);
+            .AddNpgSql(configuration.GetConnectionString("DefaultConnection")!, name: "database");
 
         return services;
     }
@@ -66,7 +64,8 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddProblemDetails();
         services.AddExceptionHandler<GlobalExceptionHandler>();
-
+        services.AddVersioning();
+        services.AddOpenApiConfig();
         return services;
     }
 }

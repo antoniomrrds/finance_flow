@@ -1,0 +1,67 @@
+using System.Data.Common;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using WebApi.Infrastructure.Persistence.Data;
+
+namespace WebApi.Tests.Infrastructure.Factories;
+
+public sealed class SqliteTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
+{
+    private readonly SqliteConnection _connection = new("DataSource=:memory:");
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.UseEnvironment("Testing");
+        builder.ConfigureTestServices(services =>
+        {
+            ServiceDescriptor? dbContextDescriptor = services.SingleOrDefault(d =>
+                d.ServiceType == typeof(IDbContextOptionsConfiguration<AppDbContext>)
+            );
+
+            if (dbContextDescriptor != null)
+            {
+                services.Remove(dbContextDescriptor);
+            }
+
+            ServiceDescriptor? dbConnectionDescriptor = services.SingleOrDefault(d =>
+                d.ServiceType == typeof(DbConnection)
+            );
+
+            if (dbConnectionDescriptor != null)
+            {
+                services.Remove(dbConnectionDescriptor);
+            }
+
+            services.AddSingleton<DbConnection>(_ =>
+            {
+                _connection.Open();
+
+                return _connection;
+            });
+
+            services.AddDbContext<AppDbContext>(
+                (container, options) =>
+                {
+                    DbConnection connection = container.GetRequiredService<DbConnection>();
+                    options.UseSqlite(connection);
+                }
+            );
+        });
+    }
+
+    public async Task InitializeAsync()
+    {
+        using IServiceScope scope = Services.CreateScope();
+
+        AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        await db.Database.EnsureCreatedAsync();
+    }
+
+    public new async Task DisposeAsync() => await _connection.DisposeAsync();
+}

@@ -9,16 +9,10 @@ namespace WebApi.Tests.Features.Categories.Create;
 public class CreateCategoryValidatorTests
     : CategoryValidatorTestBase<CreateCategory.CreateCategoryValidator, CreateCategory.Command>
 {
-    private readonly CreateCategory.Command _createCategoryCommand = CategoryFixture
-        .GetCategory()
-        .ToCommand();
+    private readonly CreateCategory.Command _command = CategoryFixture.GetCategory().ToCommand();
 
     protected override CreateCategory.Command DefaultInput() =>
-        new()
-        {
-            Name = _createCategoryCommand.Name,
-            Description = _createCategoryCommand.Description,
-        };
+        new() { Name = _command.Name, Description = _command.Description };
 
     [Fact]
     public void Validator_WhenInputIsFullyValid_ShouldPassAllValidations()

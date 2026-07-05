@@ -65,7 +65,15 @@ internal static class CustomProblemResults
                 return null;
             }
 
-            return new Dictionary<string, object?> { { "errors", validationError.Errors } };
+            return new Dictionary<string, object?>
+            {
+                {
+                    "errors",
+                    validationError
+                        .Errors.GroupBy(e => e.Property)
+                        .ToDictionary(g => g.Key, g => g.Select(x => x.Description).ToArray())
+                },
+            };
         }
     }
 }

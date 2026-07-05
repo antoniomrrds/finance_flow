@@ -39,7 +39,6 @@ public static class DependencyInjection
             typeof(DependencyInjection).Assembly,
             includeInternalTypes: true
         );
-
         return services;
     }
 }

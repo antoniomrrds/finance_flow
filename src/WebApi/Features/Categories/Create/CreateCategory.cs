@@ -1,3 +1,4 @@
+using Microsoft.OpenApi;
 using SharedKernel;
 using WebApi.Application.Abstractions.Messaging;
 using WebApi.Domain.Abstractions;
@@ -20,18 +21,31 @@ public static class CreateCategory
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
             app.MapPost(
-                "/",
-                async (
-                    Command command,
-                    ICommandHandler<Command, Guid> handler,
-                    CancellationToken cancellationToken
-                ) =>
-                {
-                    Result<Guid> result = await handler.Handle(command, cancellationToken);
-
-                    return result.Match(Results.Ok, CustomProblemResults.Problem);
-                }
-            );
+                    "/",
+                    async (
+                        Command command,
+                        ICommandHandler<Command, Guid> handler,
+                        CancellationToken cancellationToken
+                    ) =>
+                    {
+                        Result<Guid> result = await handler.Handle(command, cancellationToken);
+                        return result.Match(
+                            onSuccess: _ =>
+                                Results.Created($"/categories/{result.Value}", result.Value),
+                            onFailure: CustomProblemResults.Problem
+                        );
+                    }
+                )
+                .WithSummary("Criar categoria")
+                .WithDescription(
+                    "Cria uma nova categoria informando nome, descrição e propriedades opcionais."
+                )
+                .Produces<Guid>(StatusCodes.Status201Created)
+                .ProducesValidationProblemWithDescription()
+                .ProducesConflict(
+                    "Conflito: Já existe uma categoria cadastrada com o nome informado."
+                )
+                .ProducesInternalServerError();
         }
     }
 

@@ -17,7 +17,7 @@ public static class CategoryErrors
             $"A categoria com o id: '{id}' não foi encontrada."
         );
 
-    public static readonly FailureReason NameAlreadyExists = FailureReason.Problem(
+    public static readonly FailureReason NameAlreadyExists = FailureReason.Conflict(
         CategoryErrorCodes.NameAlreadyExists,
         "Uma categoria com o nome fornecido já existe."
     );
