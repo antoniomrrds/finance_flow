@@ -1,3 +1,3 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="..\SrcSharedPackages.props"/>
+  <Import Project="..\SrcSharedPackages.props" />
 </Project>

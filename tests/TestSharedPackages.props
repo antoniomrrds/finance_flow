@@ -1,26 +1,26 @@
 <Project>
-    <PropertyGroup>
-        <IsPackable>false</IsPackable>
-    </PropertyGroup>
-    <ItemGroup>
-        <PackageReference Include="Bogus" />
-        <PackageReference Include="Shouldly" />
-        <PackageReference Include="xunit" />
-        <PackageReference Include="NSubstitute" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-        <PackageReference Include="Microsoft.Data.Sqlite" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
-        <PackageReference Include="xunit.runner.visualstudio" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="coverlet.collector" />
-    </ItemGroup>
-    <!-- new feature to avoid file global -->
-    <ItemGroup>
-        <Using Include="Xunit" />
-        <using Include="Bogus" />
-        <using Include="Shouldly" />
-        <using Include="NSubstitute" />
-        <using Include="TestUtilities.Helpers" />
-    </ItemGroup>
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Bogus" />
+    <PackageReference Include="Shouldly" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="NSubstitute" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <PackageReference Include="Microsoft.Data.Sqlite" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="coverlet.collector" />
+  </ItemGroup>
+  <!-- new feature to avoid file global -->
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <using Include="Bogus" />
+    <using Include="Shouldly" />
+    <using Include="NSubstitute" />
+    <using Include="TestUtilities.Helpers" />
+  </ItemGroup>
 </Project>

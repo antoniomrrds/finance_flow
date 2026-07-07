@@ -1,10 +1,12 @@
 ﻿using FluentValidation;
 using FluentValidation.TestHelper;
+using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Common;
 using WebApi.Features.Categories.Create;
 
 namespace WebApi.Tests.Features.Categories.Common;
 
+[Trait("Module", nameof(Category))]
 [Trait("Feature", nameof(CreateCategory))]
 public abstract class CategoryValidatorTestBase<TValidator, TInput>
     where TValidator : IValidator<TInput>, new()

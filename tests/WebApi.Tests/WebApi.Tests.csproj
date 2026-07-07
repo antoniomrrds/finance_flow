@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="..\TestSharedPackages.props"/>
+  <Import Project="..\TestSharedPackages.props" />
   <PropertyGroup>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>

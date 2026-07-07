@@ -1,4 +1,3 @@
-using Microsoft.OpenApi;
 using SharedKernel;
 using WebApi.Application.Abstractions.Messaging;
 using WebApi.Domain.Abstractions;
@@ -69,7 +68,9 @@ public static class CreateCategory
             );
 
             if (hasCategory)
+            {
                 return CategoryErrors.NameAlreadyExists;
+            }
 
             await _repo.AddAsync(category, cancellationToken);
 

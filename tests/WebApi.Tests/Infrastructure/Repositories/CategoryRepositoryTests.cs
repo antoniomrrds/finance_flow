@@ -8,6 +8,8 @@ using WebApi.Tests.Infrastructure.Factories;
 
 namespace WebApi.Tests.Infrastructure.Repositories;
 
+[Trait("Module", nameof(Category))]
+[Trait("Feature", nameof(CreateCategory))]
 public class CategoryRepositoryTests
 {
     private readonly CategoryRepository _sut;
@@ -28,7 +30,6 @@ public class CategoryRepositoryTests
     }
 
     [Fact]
-    [Trait("Feature", nameof(CreateCategory))]
     public async Task HasCategoryWithNameAsync_WhenTheNameDoesNotExist_ShouldReturnFalse()
     {
         //Arrange & Act
@@ -38,7 +39,6 @@ public class CategoryRepositoryTests
     }
 
     [Fact]
-    [Trait("Feature", nameof(CreateCategory))]
     public async Task HasCategoryWithNameAsync_WhenNameAlreadyExists_ShouldReturnTrue()
     {
         // Arrange
@@ -50,7 +50,6 @@ public class CategoryRepositoryTests
     }
 
     [Fact]
-    [Trait("Feature", nameof(CreateCategory))]
     public async Task AddAsync_WhenCategoryIsValid_ShouldPersistCategory()
     {
         //Arrange

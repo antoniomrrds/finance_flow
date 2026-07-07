@@ -6,6 +6,7 @@ using WebApi.Tests.Domain.Categories;
 
 namespace WebApi.Tests.Features.Categories.Create;
 
+[Trait("Module", nameof(Category))]
 [Trait("Feature", nameof(CreateCategory))]
 public class CreateCategoryHandlerTests
 {

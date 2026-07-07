@@ -2,7 +2,7 @@ using WebApi.Domain.Categories;
 
 namespace WebApi.Tests.Domain.Categories;
 
-[Trait("Unit", nameof(Category))]
+[Trait("Module", nameof(Category))]
 public class CategoryTests
 {
     // Method_GivenScenario_ShouldExpectedResult

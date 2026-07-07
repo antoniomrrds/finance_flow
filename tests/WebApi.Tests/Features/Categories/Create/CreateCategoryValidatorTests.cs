@@ -1,10 +1,12 @@
 using FluentValidation.TestHelper;
+using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
 using WebApi.Tests.Domain.Categories;
 using WebApi.Tests.Features.Categories.Common;
 
 namespace WebApi.Tests.Features.Categories.Create;
 
+[Trait("Module", nameof(Category))]
 [Trait("Feature", nameof(CreateCategory))]
 public class CreateCategoryValidatorTests
     : CategoryValidatorTestBase<CreateCategory.CreateCategoryValidator, CreateCategory.Command>

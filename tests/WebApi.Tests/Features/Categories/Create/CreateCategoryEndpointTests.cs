@@ -11,6 +11,7 @@ using WebApi.Tests.Infrastructure.Http;
 
 namespace WebApi.Tests.Features.Categories.Create;
 
+[Trait("Module", nameof(Category))]
 [Trait("Feature", nameof(CreateCategory))]
 public class CreateCategoryEndpointTests : BaseIntegrationTest
 {

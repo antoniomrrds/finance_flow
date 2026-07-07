@@ -14,6 +14,14 @@ public class CategoryRepository(AppDbContext db) : ICategoryRepository
         return db.Categories.Where(c => c.Name == name).AnyAsync(cancellationToken);
     }
 
+    public Task<Category?> GetByIdAsync(
+        Guid categoryId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task AddAsync(Category category, CancellationToken cancellationToken = default)
     {
         await db.Categories.AddAsync(category, cancellationToken);

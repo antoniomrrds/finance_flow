@@ -2,7 +2,7 @@ using SharedKernel;
 
 namespace WebApi.Domain.Categories;
 
-static class CategoryErrorCodes
+internal static class CategoryErrorCodes
 {
     private const string Prefix = "CATEGORY";
     public const string NotFound = $"{Prefix}.{ErrorPatterns.NotFound}";
@@ -23,7 +23,7 @@ public static class CategoryErrors
     );
 }
 
-static class ErrorPatterns
+internal static class ErrorPatterns
 {
     public const string NotFound = "NOT_FOUND";
     public const string AlreadyExists = "ALREADY_EXISTS";
