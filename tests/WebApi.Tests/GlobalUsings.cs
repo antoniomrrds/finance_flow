@@ -1,0 +1,10 @@
+global using System.Net;
+global using System.Net.Http.Json;
+global using FluentValidation;
+global using FluentValidation.TestHelper;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using SharedKernel;
+global using Shouldly;
+global using TestUtilities.Extensions;
+global using Xunit;

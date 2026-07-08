@@ -1,4 +1,3 @@
-using SharedKernel;
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.GetById;
 using WebApi.Tests.Domain.Categories;

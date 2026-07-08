@@ -1,4 +1,3 @@
-using Asp.Versioning.Builder;
 using HealthChecks.UI.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using WebApi.Endpoints;

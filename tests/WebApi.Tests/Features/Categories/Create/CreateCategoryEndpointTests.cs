@@ -1,7 +1,3 @@
-using System.Net;
-using System.Net.Http.Json;
-using Microsoft.AspNetCore.Mvc;
-using TestUtilities.Extensions;
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
 using WebApi.Tests.Domain.Categories;

@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using TestUtilities.Extensions;
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
 using WebApi.Features.Categories.GetById;

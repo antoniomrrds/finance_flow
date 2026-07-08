@@ -1,5 +1,4 @@
 using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using WebApi.Infrastructure.Persistence.Data;
 
 namespace WebApi.Tests.Infrastructure.Factories;

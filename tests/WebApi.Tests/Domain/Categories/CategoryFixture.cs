@@ -1,4 +1,3 @@
-using TestUtilities.Helpers;
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
 

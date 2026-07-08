@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Text.Json;
 using WebApi.Endpoints;
 
 namespace WebApi.Features.Categories.Common;

@@ -1,4 +1,3 @@
-using FluentValidation.TestHelper;
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
 using WebApi.Tests.Domain.Categories;

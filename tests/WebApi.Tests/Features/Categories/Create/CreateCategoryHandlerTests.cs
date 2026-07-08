@@ -1,4 +1,3 @@
-using SharedKernel;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
