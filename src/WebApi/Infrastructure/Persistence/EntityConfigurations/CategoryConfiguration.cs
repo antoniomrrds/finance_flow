@@ -26,5 +26,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .Property(c => c.Description)
             .HasColumnName("description")
             .HasColumnType("varchar(500)");
+
+        builder.Property(x => x.CreatedAt).HasColumnName("created_at").IsRequired();
     }
 }
