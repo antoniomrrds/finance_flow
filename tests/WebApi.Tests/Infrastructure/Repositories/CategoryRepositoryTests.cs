@@ -1,32 +1,23 @@
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
 using WebApi.Features.Categories.GetById;
-using WebApi.Infrastructure.Persistence.Data;
 using WebApi.Infrastructure.Persistence.Repositories;
 using WebApi.Tests.Domain.Categories;
-using WebApi.Tests.Infrastructure.Factories;
+using WebApi.Tests.Infrastructure.Helpers;
 
 namespace WebApi.Tests.Infrastructure.Repositories;
 
 [Trait("Module", nameof(Category))]
 [Trait("Feature", nameof(CreateCategory))]
-public class CategoryRepositoryTests
+public class CategoryRepositoryTests : RepositoryTestBase
 {
     private readonly CategoryRepository _sut;
     private readonly Category _category;
-    private readonly AppDbContext _db;
 
     public CategoryRepositoryTests()
     {
         _category = CategoryFixture.GetCategory(true);
-        _db = TestDbFactory.Create();
-        _sut = new CategoryRepository(_db);
-    }
-
-    private async Task AddCategory(Category category)
-    {
-        await _db.Categories.AddAsync(category);
-        await _db.SaveChangesAsync();
+        _sut = new CategoryRepository(Db);
     }
 
     [Trait("Module", nameof(Category))]
@@ -46,7 +37,7 @@ public class CategoryRepositoryTests
     public async Task HasCategoryWithNameAsync_WhenNameAlreadyExists_ShouldReturnTrue()
     {
         // Arrange
-        await AddCategory(_category);
+        await AddAsync(_category);
         // Act
         bool nameExists = await _sut.HasCategoryWithNameAsync(_category.Name);
         // Assert
@@ -60,9 +51,9 @@ public class CategoryRepositoryTests
     {
         //Arrange
         await _sut.AddAsync(_category);
-        await _db.SaveChangesAsync();
+        await Db.SaveChangesAsync();
         //Act
-        Category? saved = await _db.Categories.FirstOrDefaultAsync(c => c.Id == _category.Id);
+        Category? saved = await Db.Categories.FirstOrDefaultAsync(c => c.Id == _category.Id);
 
         // Assert
         saved.ShouldNotBeNull();
@@ -87,7 +78,7 @@ public class CategoryRepositoryTests
     public async Task GetByIdAsync_WhenTheCategoryExists_ShouldReturnTheData()
     {
         // Arrange
-        await AddCategory(_category);
+        await AddAsync(_category);
         // Act
         Category? category = await _sut.GetByIdAsync(_category.Id);
         // Assert

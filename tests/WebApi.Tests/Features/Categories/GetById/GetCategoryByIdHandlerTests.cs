@@ -29,10 +29,10 @@ public class GetCategoryByIdQueryHandlerTests
         MakeGetCategoryByIdAsyncReturns(null);
         var expected = new GetCategoryById.Query(_category.Id);
         // Act
-        Result<GetCategoryById.CategoryResponse> result = await _sut.Handle(expected, _ct);
+        Result<GetCategoryById.Response> result = await _sut.Handle(expected, _ct);
         // Assert
         result.IsFailure.ShouldBeTrue();
-        result.Error.ShouldBe(CategoryErrors.NotFound(expected.CategoryId.ToString()));
+        result.Error.ShouldBe(CategoryErrors.NotFound(expected.Id.ToString()));
     }
 
     [Fact]
@@ -42,8 +42,8 @@ public class GetCategoryByIdQueryHandlerTests
         MakeGetCategoryByIdAsyncReturns(_category);
         var expected = new GetCategoryById.Query(_category.Id);
         // Act
-        Result<GetCategoryById.CategoryResponse> result = await _sut.Handle(expected, _ct);
-        await _repo.Received(1).GetByIdAsync(expected.CategoryId, _ct);
+        Result<GetCategoryById.Response> result = await _sut.Handle(expected, _ct);
+        await _repo.Received(1).GetByIdAsync(expected.Id, _ct);
         // Assert
         result.IsSuccess.ShouldBeTrue();
         result.Value.ShouldBe(_category.ToResponse());

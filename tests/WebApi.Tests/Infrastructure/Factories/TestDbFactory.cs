@@ -18,9 +18,6 @@ public static class TestDbFactory
         AppDbContext context = new(options);
 
         context.Database.EnsureCreated();
-
-        context.SaveChanges();
-
         return context;
     }
 }

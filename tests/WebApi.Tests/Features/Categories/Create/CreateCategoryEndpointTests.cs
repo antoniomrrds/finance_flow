@@ -1,6 +1,7 @@
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
 using WebApi.Tests.Domain.Categories;
+using WebApi.Tests.Features.Categories.Common;
 using WebApi.Tests.Infrastructure.Factories;
 using WebApi.Tests.Infrastructure.Helpers;
 using WebApi.Tests.Infrastructure.Http;
@@ -19,12 +20,6 @@ public class CreateCategoryEndpointTests : BaseIntegrationTest
         _category = CategoryFixture.GetCategory();
     }
 
-    private async Task AddCategory(Category category)
-    {
-        await Db.Categories.AddAsync(category);
-        await Db.SaveChangesAsync();
-    }
-
     [Fact]
     public async Task WhenValidData_ShouldReturn201()
     {
@@ -32,7 +27,7 @@ public class CreateCategoryEndpointTests : BaseIntegrationTest
         var createCategoryCommand = _category.ToCommand();
         // Act
         HttpResponseMessage response = await Client.PostAsJsonAsync(
-            "/api/v1/categories",
+            CategoriesRoutes.BasePath,
             createCategoryCommand
         );
         // Assert
@@ -46,7 +41,7 @@ public class CreateCategoryEndpointTests : BaseIntegrationTest
         var createCategoryCommand = new CreateCategory.Command();
         // Act
         HttpResponseMessage response = await Client.PostAsJsonAsync(
-            "/api/v1/categories",
+            CategoriesRoutes.BasePath,
             createCategoryCommand
         );
         // Assert
@@ -61,10 +56,10 @@ public class CreateCategoryEndpointTests : BaseIntegrationTest
     {
         // Arrange
         var createCategoryCommand = _category.ToCommand();
-        await AddCategory(_category);
+        await AddAsync(_category);
         // Act
         HttpResponseMessage response = await Client.PostAsJsonAsync(
-            "/api/v1/categories",
+            CategoriesRoutes.BasePath,
             createCategoryCommand
         );
         // Assert

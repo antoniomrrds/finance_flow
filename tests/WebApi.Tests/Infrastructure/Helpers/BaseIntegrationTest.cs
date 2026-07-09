@@ -34,4 +34,11 @@ public abstract class BaseIntegrationTest : IClassFixture<SqliteTestWebAppFactor
     {
         return Task.CompletedTask;
     }
+
+    protected async Task AddAsync<TEntity>(TEntity entity)
+        where TEntity : class
+    {
+        await Db.Set<TEntity>().AddAsync(entity);
+        await Db.SaveChangesAsync();
+    }
 }
