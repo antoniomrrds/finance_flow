@@ -36,4 +36,19 @@ public class GetCategoryEndpointTests : BaseIntegrationTest
         content.ShouldNotBeNull();
         content.ShouldMatch(_category.ToResponse());
     }
+
+    [Fact]
+    public async Task WhenDataIsNotFound_ShouldReturnFailureAnd404()
+    {
+        // Arrange
+        GetCategoryById.Query query = new(_category.Id);
+        // Act
+        HttpResponseMessage httpResponse = await Client.GetAsync(
+            CategoriesRoutes.GetById(query.Id)
+        );
+        httpResponse.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        // Assert
+        ProblemDetails errorResponse = await httpResponse.GetErrorResponse<ProblemDetails>();
+        errorResponse.Detail.ShouldBe(CategoryErrors.NotFound(query.Id.ToString()).Description);
+    }
 }
