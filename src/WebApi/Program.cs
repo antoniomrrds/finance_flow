@@ -21,7 +21,7 @@ app.MapApiEndpoints();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.ApplyMigrations();
+    // app.ApplyMigrations();
     app.UseOpenApiUi();
 }
 
