@@ -9,8 +9,19 @@ public static class MigrationExtensions
     {
         using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-        using AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
-        dbContext.Database.Migrate();
+        bool apply = configuration.GetValue<bool>("Database:ApplyMigrations");
+
+        if (!apply)
+        {
+            return;
+        }
+
+        using AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        if (dbContext.Database.GetPendingMigrations().Any())
+        {
+            dbContext.Database.Migrate();
+        }
     }
 }
