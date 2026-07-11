@@ -28,4 +28,32 @@ public class CategoryRepository(AppDbContext db) : ICategoryRepository
     {
         await db.Categories.AddAsync(category, cancellationToken);
     }
+
+    public async Task<CategoryUpdateOutcome> UpdateIfValidAsync(
+        Category category,
+        CancellationToken cancellationToken = default
+    )
+    {
+        int affectedRows = await db
+            .Categories.Where(c => c.Id == category.Id)
+            .Where(c =>
+                !db.Categories.Any(other => other.Id != category.Id && other.Name == category.Name)
+            )
+            .ExecuteUpdateAsync(
+                setters =>
+                    setters
+                        .SetProperty(c => c.Name, category.Name)
+                        .SetProperty(c => c.Description, category.Description),
+                cancellationToken
+            );
+
+        if (affectedRows > 0)
+        {
+            return CategoryUpdateOutcome.Updated;
+        }
+
+        bool exists = await db.Categories.AnyAsync(c => c.Id == category.Id, cancellationToken);
+
+        return exists ? CategoryUpdateOutcome.NameConflict : CategoryUpdateOutcome.NotFound;
+    }
 }

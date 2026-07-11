@@ -3,6 +3,7 @@ using WebApi.Application.Abstractions.Messaging;
 using WebApi.Domain.Categories;
 using WebApi.Endpoints;
 using WebApi.Extensions;
+using WebApi.Extensions.Docs;
 using WebApi.Features.Categories.Common;
 using WebApi.Infrastructure.Http;
 
@@ -41,8 +42,7 @@ public static class GetCategoryById
                     }
                 )
                 .WithSummary("Buscar uma categoria")
-                .WithDescription("Buscar uma categoria pelo Id.")
-                .Produces<Response>()
+                .ProducesOk<Response>("Categoria encontrada com sucesso.")
                 .ProducesNotFound("Categoria não encotrada.")
                 .ProducesInternalServerError();
         }
