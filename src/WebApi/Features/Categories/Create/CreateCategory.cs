@@ -4,6 +4,7 @@ using WebApi.Domain.Abstractions;
 using WebApi.Domain.Categories;
 using WebApi.Endpoints;
 using WebApi.Extensions;
+using WebApi.Extensions.Docs;
 using WebApi.Features.Categories.Common;
 using WebApi.Infrastructure.Http;
 
@@ -36,10 +37,7 @@ public static class CreateCategory
                     }
                 )
                 .WithSummary("Criar categoria")
-                .WithDescription(
-                    "Cria uma nova categoria informando nome, descrição e propriedades opcionais."
-                )
-                .Produces<Guid>(StatusCodes.Status201Created)
+                .ProducesCreated<Guid>("Categoria criada com sucesso.")
                 .ProducesValidationProblemWithDescription()
                 .ProducesConflict(
                     "Conflito: Já existe uma categoria cadastrada com o nome informado."

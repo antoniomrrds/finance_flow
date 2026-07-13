@@ -53,3 +53,55 @@ Retrieve a category by its identifier.
   "updatedAt": "2026-07-07T12:00:00Z"
 }
 ```
+
+---
+# Update Category
+
+## Goal
+
+Update an existing category.
+
+## Request
+
+### Endpoint
+
+| Method | Route                     |
+|--------|---------------------------|
+| PUT | `/api/v1/categories/{id}` |
+
+### Route Parameters
+
+| Name | Type | Required |
+|------|------|----------|
+| id | Guid | ✅ |
+
+### Body
+
+| Name | Type | Required |
+|------|------|---------|
+| name | string | ✅ |
+| description | string | ⛔️ |
+
+---
+
+## Main Flow
+
+1. ⛔️ Authenticate the user.
+2. ⛔️ Validate the request body.
+3. ⛔️ Check if the category exists.
+4. ⛔️ Check if the given category (if provided) exists.
+5. ⛔️ Update only the provided fields.
+7. ⛔️ Return `204 NotContent`.
+---
+
+## Responses
+
+| Status                    | Description                                      | Progress |
+|---------------------------|--------------------------------------------------|----------|
+| 204 Not Content           | Category updated successfully.                   | ⛔️ |
+| 400 Bad Request           | Invalid field value.                             | ⛔️ |
+| 401 Unauthorized          | The user is not authenticated.                   | ⛔️ |
+| 403 Forbidden             | The user is not authorized to update categories. | ⛔️ |
+| 404 Not Found             | The category does not exist.                     | ⛔️ |
+| 500 Internal Server Error | An unexpected error occurred.                    | ⛔️ |
+

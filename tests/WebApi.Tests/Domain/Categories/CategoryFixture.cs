@@ -1,5 +1,6 @@
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
+using WebApi.Features.Categories.update;
 
 namespace WebApi.Tests.Domain.Categories;
 
@@ -24,10 +25,4 @@ internal static class CategoryFixture
 
     private static int GetSeed(bool useNewSeed) =>
         useNewSeed ? SecureSeedGenerator.Generate() : FakerConstants.DefaultSeed;
-}
-
-internal static class CategoryExtensions
-{
-    internal static CreateCategory.Command ToCommand(this Category category) =>
-        new() { Name = category.Name, Description = category.Description ?? string.Empty };
 }

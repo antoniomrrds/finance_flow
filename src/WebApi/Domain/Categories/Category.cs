@@ -17,4 +17,6 @@ public sealed class Category
 
     // Required for Entity Framework core
     private Category() { }
+
+    public void SetName(string name) => Name = name;
 }
