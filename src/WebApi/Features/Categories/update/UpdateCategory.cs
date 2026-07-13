@@ -1,3 +1,4 @@
+using FluentValidation;
 using SharedKernel;
 using WebApi.Application.Abstractions.Messaging;
 using WebApi.Domain.Categories;
@@ -22,7 +23,13 @@ public static class UpdateCategory
         public string? Description { get; init; }
     }
 
-    public class Validator : CommonCategoryValidator<Command>;
+    public class Validator : CommonCategoryValidator<Command>
+    {
+        public Validator()
+        {
+            RuleFor(x => x.Id).NotEmpty().WithMessage("Informe um {PropertyName} vàlido.");
+        }
+    }
 
     public sealed class Endpoint : IEndpoint<CategoryGroup>
     {

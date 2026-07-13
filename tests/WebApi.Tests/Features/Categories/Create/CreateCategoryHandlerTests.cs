@@ -19,7 +19,7 @@ public class CreateCategoryHandlerTests
     public CreateCategoryHandlerTests()
     {
         _category = CategoryFixture.GetCategory();
-        _command = CategoryFixture.GetCategory().ToCommand();
+        _command = CategoryFixture.GetCategory().ToCreateCommand();
         _repo = Substitute.For<ICategoryRepository>();
         _uow = Substitute.For<IUnitOfWork>();
 

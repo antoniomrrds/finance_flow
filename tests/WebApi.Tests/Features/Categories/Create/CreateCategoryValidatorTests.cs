@@ -10,7 +10,9 @@ namespace WebApi.Tests.Features.Categories.Create;
 public class CreateCategoryValidatorTests
     : CategoryValidatorTestBase<CreateCategory.CreateCategoryValidator, CreateCategory.Command>
 {
-    private readonly CreateCategory.Command _command = CategoryFixture.GetCategory().ToCommand();
+    private readonly CreateCategory.Command _command = CategoryFixture
+        .GetCategory(true)
+        .ToCreateCommand();
 
     protected override CreateCategory.Command DefaultInput() =>
         new() { Name = _command.Name, Description = _command.Description };

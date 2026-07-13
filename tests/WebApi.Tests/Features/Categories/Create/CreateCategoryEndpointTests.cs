@@ -24,7 +24,7 @@ public class CreateCategoryEndpointTests : BaseIntegrationTest
     public async Task WhenValidData_ShouldReturn201()
     {
         // Arrange
-        var createCategoryCommand = _category.ToCommand();
+        CreateCategory.Command createCategoryCommand = _category.ToCreateCommand();
         // Act
         HttpResponseMessage response = await Client.PostAsJsonAsync(
             CategoriesRoutes.BasePath,
@@ -55,7 +55,7 @@ public class CreateCategoryEndpointTests : BaseIntegrationTest
     public async Task Create_WithExistingName_ShouldReturn409()
     {
         // Arrange
-        var createCategoryCommand = _category.ToCommand();
+        CreateCategory.Command createCategoryCommand = _category.ToCreateCommand();
         await AddAsync(_category);
         // Act
         HttpResponseMessage response = await Client.PostAsJsonAsync(
