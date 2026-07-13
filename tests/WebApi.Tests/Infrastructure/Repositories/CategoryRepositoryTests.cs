@@ -1,6 +1,7 @@
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
 using WebApi.Features.Categories.GetById;
+using WebApi.Features.Categories.update;
 using WebApi.Infrastructure.Persistence.Repositories;
 using WebApi.Tests.Domain.Categories;
 using WebApi.Tests.Infrastructure.Helpers;
@@ -84,5 +85,48 @@ public class CategoryRepositoryTests : RepositoryTestBase
         // Assert
         category.ShouldNotBeNull();
         category.ShouldMatch(_category);
+    }
+
+    [Trait("Module", nameof(Category))]
+    [Trait("Feature", nameof(UpdateCategory))]
+    [Fact]
+    public async Task UpdateIfValidAsync_IfTheCategoryDoesNotExist_ShouldReturnNotFound()
+    {
+        // Arrange && Act
+        CategoryUpdateOutcome categoryUpdateOutcome = await _sut.UpdateIfValidAsync(_category);
+        // Assert
+        categoryUpdateOutcome.ShouldBe(CategoryUpdateOutcome.NotFound);
+    }
+
+    [Trait("Module", nameof(Category))]
+    [Trait("Feature", nameof(UpdateCategory))]
+    [Fact]
+    public async Task UpdateIfValidAsync_IfTheCategoryNameExist_ShouldReturnNameConflict()
+    {
+        // Arrange
+        List<Category> categories = CategoryFixture.GetCategories(2, true);
+        await InsertBatchRange(categories);
+        Category category1 = categories.First();
+        Category categoryToUpdate = categories[1];
+        categoryToUpdate.SetName(category1.Name);
+        // Act
+        CategoryUpdateOutcome categoryUpdateOutcome = await _sut.UpdateIfValidAsync(
+            categoryToUpdate
+        );
+        // Assert
+        categoryUpdateOutcome.ShouldBe(CategoryUpdateOutcome.NameConflict);
+    }
+
+    [Trait("Module", nameof(Category))]
+    [Trait("Feature", nameof(UpdateCategory))]
+    [Fact]
+    public async Task UpdateIfValidAsync_WhenDataIsValid_ShouldReturnUpdated()
+    {
+        // Arrange
+        await AddAsync(_category);
+        // Act
+        CategoryUpdateOutcome categoryUpdateOutcome = await _sut.UpdateIfValidAsync(_category);
+        // Assert
+        categoryUpdateOutcome.ShouldBe(CategoryUpdateOutcome.Updated);
     }
 }

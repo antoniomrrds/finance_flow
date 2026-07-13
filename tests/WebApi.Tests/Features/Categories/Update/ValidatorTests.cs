@@ -1,5 +1,4 @@
 using WebApi.Domain.Categories;
-using WebApi.Features.Categories.Create;
 using WebApi.Features.Categories.update;
 using WebApi.Tests.Domain.Categories;
 using WebApi.Tests.Features.Categories.Common;
