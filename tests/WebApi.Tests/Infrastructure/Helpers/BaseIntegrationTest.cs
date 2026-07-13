@@ -41,4 +41,11 @@ public abstract class BaseIntegrationTest : IClassFixture<SqliteTestWebAppFactor
         await Db.Set<TEntity>().AddAsync(entity);
         await Db.SaveChangesAsync();
     }
+
+    protected async Task InsertBatchRange<TEntity>(IEnumerable<TEntity> entities)
+        where TEntity : class
+    {
+        Db.Set<TEntity>().AddRange(entities);
+        await Db.SaveChangesAsync();
+    }
 }

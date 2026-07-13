@@ -38,7 +38,7 @@ public class GetCategoryEndpointTests : BaseIntegrationTest
     }
 
     [Fact]
-    public async Task WhenDataIsNotFound_ShouldReturnFailureAnd404()
+    public async Task Update_WhenDataIsNotFound_ShouldReturnFailureAnd404()
     {
         // Arrange
         GetCategoryById.Query query = new(_category.Id);
