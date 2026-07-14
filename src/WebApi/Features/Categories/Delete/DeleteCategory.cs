@@ -35,7 +35,7 @@ public static class DeleteCategory
                         CancellationToken cancellationToken
                     ) =>
                     {
-                        Command command = new(id);
+                        var command = new Command(id);
                         Result result = await handler.Handle(command, cancellationToken);
                         return result.Match(Results.NoContent, CustomProblemResults.Problem);
                     }
