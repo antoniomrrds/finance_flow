@@ -1,5 +1,6 @@
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
+using WebApi.Features.Categories.Delete;
 using WebApi.Features.Categories.GetById;
 using WebApi.Features.Categories.update;
 using WebApi.Infrastructure.Persistence.Repositories;
@@ -101,7 +102,7 @@ public class CategoryRepositoryTests : RepositoryTestBase
     [Trait("Module", nameof(Category))]
     [Trait("Feature", nameof(UpdateCategory))]
     [Fact]
-    public async Task UpdateIfValidAsync_IfTheCategoryNameExist_ShouldReturnNameConflict()
+    public async Task UpdateIfValidAsync_IfTheCategoryNameExists_ShouldReturnNameConflict()
     {
         // Arrange
         List<Category> categories = CategoryFixture.GetCategories(2, true);
@@ -128,5 +129,29 @@ public class CategoryRepositoryTests : RepositoryTestBase
         CategoryUpdateOutcome categoryUpdateOutcome = await _sut.UpdateIfValidAsync(_category);
         // Assert
         categoryUpdateOutcome.ShouldBe(CategoryUpdateOutcome.Updated);
+    }
+
+    [Trait("Module", nameof(Category))]
+    [Trait("Feature", nameof(DeleteCategory))]
+    [Fact]
+    public async Task DeleteAsync_WhenTheCategoryDoesNotExist_ShouldReturnFalse()
+    {
+        // Arrange && Act
+        bool isDeleted = await _sut.DeleteAsync(_category.Id);
+        // Assert
+        isDeleted.ShouldBeFalse();
+    }
+
+    [Trait("Module", nameof(Category))]
+    [Trait("Feature", nameof(DeleteCategory))]
+    [Fact]
+    public async Task DeleteAsync_WhenTheCategoryExists_ShouldReturnTrue()
+    {
+        // Arrange
+        await AddAsync(_category);
+        // Act
+        bool isDeleted = await _sut.DeleteAsync(_category.Id);
+        // Assert
+        isDeleted.ShouldBeTrue();
     }
 }
