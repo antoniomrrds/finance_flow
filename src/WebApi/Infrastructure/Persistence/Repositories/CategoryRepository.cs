@@ -56,4 +56,13 @@ public class CategoryRepository(AppDbContext db) : ICategoryRepository
 
         return exists ? CategoryUpdateOutcome.NameConflict : CategoryUpdateOutcome.NotFound;
     }
+
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        int affectedRows = await db
+            .Categories.Where(c => c.Id == id)
+            .ExecuteDeleteAsync(cancellationToken: cancellationToken);
+
+        return affectedRows > 0;
+    }
 }
