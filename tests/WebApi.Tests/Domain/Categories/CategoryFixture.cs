@@ -1,6 +1,4 @@
 using WebApi.Domain.Categories;
-using WebApi.Features.Categories.Create;
-using WebApi.Features.Categories.update;
 
 namespace WebApi.Tests.Domain.Categories;
 

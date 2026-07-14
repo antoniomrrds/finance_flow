@@ -6,7 +6,6 @@ using WebApi.Endpoints;
 using WebApi.Extensions;
 using WebApi.Extensions.Docs;
 using WebApi.Features.Categories.Common;
-using WebApi.Features.Categories.update;
 using WebApi.Infrastructure.Http;
 
 namespace WebApi.Features.Categories.Delete;
