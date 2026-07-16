@@ -8,6 +8,7 @@
 ![Tests](https://img.shields.io/badge/Tests-xUnit-512BD4?style=for-the-badge)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
+[![codecov](https://codecov.io/gh/antoniomrrds/finance_flow/branch/main/graph/badge.svg?token=orNk9n8LG6)](https://codecov.io/gh/antoniomrrds/finance_flow)
 
 </div>
 
@@ -22,7 +23,7 @@ Desenvolvida com foco em boas práticas de software, arquitetura limpa e testes 
 - 🏗️ **Arquitetura Limpa** com separação de responsabilidades
 - 🔄 **Versionamento de API** com ASP.NET Core API Versioning
 - ✅ **Validação Robusta** com FluentValidation em português
-- 📊 **Documentação Automática** com Swagger/OpenAPI e Scalar UI
+- 📊 **Documentação Automática** com Swagger/OpenAPI
 - 💾 **PostgreSQL 17** como banco de dados principal
 - 🧪 **Testes Abrangentes** (unitários, integração e E2E)
 - 🚀 **CI/CD** com GitHub Actions
@@ -116,7 +117,6 @@ A API estará disponível em:
 
 Após iniciar a aplicação, acesse:
 
-- **Scalar UI**: `http://localhost:5000/scalar/v1`
 - **Swagger UI**: `http://localhost:5000/swagger/index.html`
 - **OpenAPI JSON**: `http://localhost:5000/openapi/v1.json`
 - **Health Check**: `http://localhost:5000/health`
@@ -267,7 +267,7 @@ finance_flow/
 │   │   ├── Domain/             # Entidades de negócio
 │   │   ├── Features/           # Features da aplicação
 │   │   ├── Infrastructure/     # Camada de infraestrutura
-│   │   ├── Common/             # Código compartilhado
+│   │   ├── Shared/             # Código compartilhado
 │   │   └── WebApi.csproj
 │   │
 │   ├── SharedKernel/           # Kernel compartilhado
