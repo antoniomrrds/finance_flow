@@ -43,7 +43,7 @@ public class CreateCategoryHandlerTests : DbContextTestBase
         // Act
         Result<Guid> result = await _sut.Handle(categoryToCreate.ToCreateCommand(), _ct);
         // Assert
-        result.IsFailure.ShouldBeFalse();
-        // result.Error.ShouldBe(CategoryErrors.NameAlreadyExists);
+        result.IsFailure.ShouldBeTrue();
+        result.Error.ShouldBe(CategoryErrors.NameAlreadyExists);
     }
 }
