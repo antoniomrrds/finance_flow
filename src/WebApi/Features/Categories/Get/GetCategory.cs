@@ -1,8 +1,10 @@
 using WebApi.Configuration;
 using WebApi.Configuration.Docs;
 using WebApi.Domain.Categories;
+using WebApi.Features.Abstractions.Data;
 using WebApi.Features.Categories.Shared;
 using WebApi.Infrastructure.Http;
+using WebApi.Infrastructure.Pagination;
 
 namespace WebApi.Features.Categories.Get;
 
@@ -50,7 +52,7 @@ public static class GetCategories
         }
     }
 
-    internal sealed class Handler(ICategoryRepository repo)
+    internal sealed class Handler(IApplicationDbContext db)
         : IQueryHandler<Query, PagedResponse<Response>>
     {
         public async Task<Result<PagedResponse<Response>>> Handle(
@@ -64,11 +66,16 @@ public static class GetCategories
                 PageSize = query.PageSize,
             };
 
-            (List<Category> items, PagedMetadata meta) = await repo.GetPagedAsync(
-                pagination,
-                query.Name,
-                cancellationToken
-            );
+            IQueryable<Category> baseQuery = db.Categories.AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(query.Name))
+            {
+                baseQuery = baseQuery.Where(c => c.Name.Contains(query.Name));
+            }
+
+            (List<Category> items, PagedMetadata meta) = await baseQuery
+                .OrderBy(c => c.Name)
+                .ToPagedAsync(pagination, cancellationToken);
 
             var data = items.Select(c => c.ToResponse<Response>()).ToList();
 

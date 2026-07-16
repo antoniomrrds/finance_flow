@@ -1,6 +1,7 @@
 using WebApi.Configuration;
 using WebApi.Configuration.Docs;
 using WebApi.Domain.Categories;
+using WebApi.Features.Abstractions.Data;
 using WebApi.Features.Categories.Shared;
 using WebApi.Infrastructure.Http;
 
@@ -45,14 +46,17 @@ public static class GetCategoryById
         }
     }
 
-    internal sealed class Handler(ICategoryRepository repo) : IQueryHandler<Query, Response>
+    internal sealed class Handler(IApplicationDbContext context) : IQueryHandler<Query, Response>
     {
         public async Task<Result<Response>> Handle(Query query, CancellationToken cancellationToken)
         {
-            Category? category = await repo.GetByIdAsync(query.Id, cancellationToken);
-            return category is null
-                ? CategoryErrors.NotFound(id: query.Id.ToString())
-                : category.ToResponse<Response>();
+            Response? category = await context
+                .Categories.AsNoTracking()
+                .Where(c => c.Id == query.Id)
+                .Select(CategoryMappings.ToResponseExpression<Response>())
+                .SingleOrDefaultAsync(cancellationToken);
+
+            return category is null ? CategoryErrors.NotFound(id: query.Id.ToString()) : category;
         }
     }
 }

@@ -2,6 +2,7 @@ using WebApi.Configuration;
 using WebApi.Configuration.Docs;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Categories;
+using WebApi.Features.Abstractions.Data;
 using WebApi.Features.Categories.Shared;
 using WebApi.Infrastructure.Http;
 
@@ -43,33 +44,23 @@ public static class CreateCategory
         }
     }
 
-    internal class CreateCategoryHandler : ICommandHandler<Command, Guid>
+    internal class CreateCategoryHandler(IApplicationDbContext context)
+        : ICommandHandler<Command, Guid>
     {
-        private readonly ICategoryRepository _repo;
-        private readonly IUnitOfWork _uow;
-
-        public CreateCategoryHandler(ICategoryRepository repo, IUnitOfWork unitOfWork)
-        {
-            _repo = repo;
-            _uow = unitOfWork;
-        }
-
         public async Task<Result<Guid>> Handle(Command command, CancellationToken cancellationToken)
         {
             var category = new Category(Guid.NewGuid(), command.Name, command.Description);
-            bool hasCategory = await _repo.HasCategoryWithNameAsync(
-                name: category.Name,
-                cancellationToken: cancellationToken
-            );
-
+            bool hasCategory = await context
+                .Categories.Where(c => c.Name == category.Name)
+                .AnyAsync(cancellationToken);
             if (hasCategory)
             {
                 return CategoryErrors.NameAlreadyExists;
             }
 
-            await _repo.AddAsync(category, cancellationToken);
+            await context.Categories.AddAsync(category, cancellationToken);
 
-            await _uow.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
             return category.Id;
         }
     }

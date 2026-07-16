@@ -2,10 +2,9 @@ using FluentValidation;
 using WebApi.Configuration.Docs;
 using WebApi.Configuration.Versioning;
 using WebApi.Domain.Abstractions;
-using WebApi.Domain.Categories;
 using WebApi.Features.Abstractions.Behaviors;
+using WebApi.Features.Abstractions.Data;
 using WebApi.Infrastructure.Data;
-using WebApi.Infrastructure.Data.Repositories;
 using WebApi.Infrastructure.Http;
 
 namespace WebApi.Configuration;
@@ -30,9 +29,9 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(connection).UseSnakeCaseNamingConvention()
         );
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<AppDbContext>());
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<AppDbContext>());
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
 
         services.AddHealthChecks().AddNpgSql(connection, "database");
 

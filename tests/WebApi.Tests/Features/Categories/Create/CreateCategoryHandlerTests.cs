@@ -1,29 +1,22 @@
-using WebApi.Domain.Abstractions;
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.Create;
 using WebApi.Tests.Domain.Categories;
+using WebApi.Tests.Infrastructure.TestBase;
 
 namespace WebApi.Tests.Features.Categories.Create;
 
 [Trait("Module", nameof(Category))]
 [Trait("Feature", nameof(CreateCategory))]
-public class CreateCategoryHandlerTests
+public class CreateCategoryHandlerTests : DbContextTestBase
 {
     private readonly CreateCategory.CreateCategoryHandler _sut;
-    private readonly Category _category;
     private readonly CreateCategory.Command _command;
-    private readonly ICategoryRepository _repo;
     private readonly CancellationToken _ct = CancellationToken.None;
-    private readonly IUnitOfWork _uow;
 
     public CreateCategoryHandlerTests()
     {
-        _category = CategoryFixture.GetCategory();
-        _command = CategoryFixture.GetCategory().ToCreateCommand();
-        _repo = Substitute.For<ICategoryRepository>();
-        _uow = Substitute.For<IUnitOfWork>();
-
-        _sut = new CreateCategory.CreateCategoryHandler(_repo, _uow);
+        _command = CategoryFixture.GetCategory(true).ToCreateCommand();
+        _sut = new CreateCategory.CreateCategoryHandler(Db);
     }
 
     //Method_Condition_Expected
@@ -31,13 +24,9 @@ public class CreateCategoryHandlerTests
     public async Task Handle_WhenCategoryDoesNotExist_ReturnsSuccessResultWithGuid()
     {
         // Arrange
-        MakeHasCategoryWithNameAsyncReturns(false);
         // Act
         Result<Guid> result = await _sut.Handle(_command, _ct);
         // Assert
-        await _repo.Received(1).HasCategoryWithNameAsync(_command.Name, _ct);
-        await _repo.Received(1).AddAsync(Arg.Any<Category>(), _ct);
-        await _uow.Received(1).SaveChangesAsync(_ct);
         result.IsSuccess.ShouldBeTrue();
         result.Value.ShouldNotBe(Guid.Empty);
     }
@@ -46,16 +35,15 @@ public class CreateCategoryHandlerTests
     public async Task Handle_WhenCategoryNameAlreadyExists_ReturnsFailure()
     {
         // Arrange
-        MakeHasCategoryWithNameAsyncReturns(true);
+        List<Category> categories = CategoryFixture.GetCategories(2, true);
+        await SeedRangeAsync(categories);
+        Category category1 = categories.First();
+        Category categoryToCreate = categories[1];
+        categoryToCreate.SetName(category1.Name);
         // Act
-        Result<Guid> result = await _sut.Handle(_command, _ct);
+        Result<Guid> result = await _sut.Handle(categoryToCreate.ToCreateCommand(), _ct);
         // Assert
         result.IsFailure.ShouldBeTrue();
         result.Error.ShouldBe(CategoryErrors.NameAlreadyExists);
-    }
-
-    private void MakeHasCategoryWithNameAsyncReturns(bool returnValue)
-    {
-        _repo.HasCategoryWithNameAsync(_category.Name, _ct).Returns(returnValue);
     }
 }

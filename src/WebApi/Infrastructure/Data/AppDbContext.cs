@@ -1,9 +1,13 @@
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Categories;
+using WebApi.Features.Abstractions.Data;
 
 namespace WebApi.Infrastructure.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IUnitOfWork
+public class AppDbContext(DbContextOptions<AppDbContext> options)
+    : DbContext(options),
+        IApplicationDbContext,
+        IUnitOfWork
 {
     public DbSet<Category> Categories { get; set; }
 
