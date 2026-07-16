@@ -10,6 +10,12 @@ public interface ICategoryRepository
         Category category,
         CancellationToken cancellationToken = default
     );
+    Task<(List<Category> Items, PagedMetadata Meta)> GetPagedAsync(
+        PaginationQuery pagination,
+        string? nameFilter,
+        CancellationToken cancellationToken = default
+    );
+
     Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 }
 

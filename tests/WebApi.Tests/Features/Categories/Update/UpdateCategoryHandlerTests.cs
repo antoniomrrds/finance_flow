@@ -1,5 +1,5 @@
 using WebApi.Domain.Categories;
-using WebApi.Features.Categories.update;
+using WebApi.Features.Categories.Update;
 using WebApi.Tests.Domain.Categories;
 
 namespace WebApi.Tests.Features.Categories.Update;

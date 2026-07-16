@@ -1,10 +1,10 @@
 using WebApi.Domain.Categories;
-using WebApi.Features.Categories.update;
+using WebApi.Features.Categories.Update;
 using WebApi.Tests.Domain.Categories;
-using WebApi.Tests.Features.Categories.Common;
+using WebApi.Tests.Features.Categories.Shared;
 using WebApi.Tests.Infrastructure.Factories;
-using WebApi.Tests.Infrastructure.Helpers;
 using WebApi.Tests.Infrastructure.Http;
+using WebApi.Tests.Infrastructure.TestBase;
 
 namespace WebApi.Tests.Features.Categories.Update;
 

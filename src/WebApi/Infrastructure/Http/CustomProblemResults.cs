@@ -1,5 +1,3 @@
-using SharedKernel;
-
 namespace WebApi.Infrastructure.Http;
 
 internal static class CustomProblemResults

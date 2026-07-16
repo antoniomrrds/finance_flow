@@ -1,5 +1,6 @@
 using WebApi.Domain.Categories;
 using WebApi.Features.Categories.GetById;
+using WebApi.Features.Categories.Shared;
 using WebApi.Tests.Domain.Categories;
 
 namespace WebApi.Tests.Features.Categories.GetById;
@@ -46,7 +47,7 @@ public class GetCategoryByIdQueryHandlerTests
         await _repo.Received(1).GetByIdAsync(expected.Id, _ct);
         // Assert
         result.IsSuccess.ShouldBeTrue();
-        result.Value.ShouldBe(_category.ToResponse());
+        result.Value.ShouldBe(_category.ToResponse<GetCategoryById.Response>());
     }
 
     private void MakeGetCategoryByIdAsyncReturns(Category? returnValue)

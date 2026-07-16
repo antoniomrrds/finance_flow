@@ -1,11 +1,8 @@
-using SharedKernel;
-using WebApi.Application.Abstractions.Messaging;
+using WebApi.Configuration;
+using WebApi.Configuration.Docs;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Categories;
-using WebApi.Endpoints;
-using WebApi.Extensions;
-using WebApi.Extensions.Docs;
-using WebApi.Features.Categories.Common;
+using WebApi.Features.Categories.Shared;
 using WebApi.Infrastructure.Http;
 
 namespace WebApi.Features.Categories.Create;
