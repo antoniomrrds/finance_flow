@@ -19,12 +19,26 @@
 ## or put your custom commands -------------------
 #echo 'Husky.Net is awesome!'
 
-echo "🧪 Running .NET tests..."
-dotnet test --verbosity minimal --no-restore
+# echo "🧪 Running .NET tests..."
+# dotnet test --verbosity minimal --no-restore
 
-if [ $? -ne 0 ]; then
-    echo "❌ Tests failed! Push blocked."
-    exit 1
-else
-    echo "✅ All tests passed!"
-fi
+# if [ $? -ne 0 ]; then
+#     echo "❌ Tests failed! Push blocked."
+#     exit 1
+# else
+#     echo "✅ All tests passed!"
+# fi
+
+    
+    #  {
+    #    "name": "run-tests",
+    #    "group": "pre-push",
+    #    "description": "Run all tests before push",
+    #    "command": "dotnet",
+    #    "args": [
+    #      "test",
+    #      "--verbosity",
+    #      "minimal",
+    #      "--no-restore"
+    #    ]
+    #  }

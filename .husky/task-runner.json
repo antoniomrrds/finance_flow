@@ -1,5 +1,5 @@
 {
-   "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
+  "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
   "tasks": [
     {
       "name": "format-csharpier",
@@ -10,7 +10,7 @@
         "tool",
         "run",
         "csharpier",
-        "format",     
+        "format",
         "--",
         "${staged}"
       ],
@@ -32,19 +32,6 @@
         "--args",
         "${args}"
       ]
-    },
-    {
-      "name": "run-tests",
-      "group": "pre-push",
-      "description": "Run all tests before push",
-      "command": "dotnet",
-      "args": [
-        "test",
-        "--verbosity",
-        "minimal",
-        "--no-restore"
-      ]
     }
   ]
 }
-
