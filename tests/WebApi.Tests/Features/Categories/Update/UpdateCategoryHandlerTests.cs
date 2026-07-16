@@ -1,21 +1,20 @@
 using WebApi.Domain.Categories;
-using WebApi.Features.Categories.update;
+using WebApi.Features.Categories.Update;
 using WebApi.Tests.Domain.Categories;
+using WebApi.Tests.Infrastructure.TestBase;
 
 namespace WebApi.Tests.Features.Categories.Update;
 
 [Trait("Module", nameof(Category))]
 [Trait("Feature", nameof(UpdateCategory))]
-public class UpdateCategoryHandlerTests
+public class UpdateCategoryHandlerTests : DbContextTestBase
 {
     private readonly UpdateCategory.Handler _sut;
-    private readonly ICategoryRepository _categoryRepository;
     private readonly CancellationToken _ct = CancellationToken.None;
 
     public UpdateCategoryHandlerTests()
     {
-        _categoryRepository = Substitute.For<ICategoryRepository>();
-        _sut = new UpdateCategory.Handler(_categoryRepository);
+        _sut = new UpdateCategory.Handler(Db);
     }
 
     [Fact]
@@ -23,10 +22,9 @@ public class UpdateCategoryHandlerTests
     {
         // Arrange
         Category expectedCategory = CategoryFixture.GetCategory(true);
-        MakeUpdateIfValidAsyncReturns(CategoryUpdateOutcome.Updated);
+        await SeedAsync(expectedCategory);
         // Act
         Result result = await _sut.Handle(expectedCategory.ToUpdateCommand(), _ct);
-        await _categoryRepository.Received(1).UpdateIfValidAsync(Arg.Any<Category>(), _ct);
         // Assert
         result.IsSuccess.ShouldBeTrue();
     }
@@ -36,10 +34,8 @@ public class UpdateCategoryHandlerTests
     {
         // Arrange
         Category expectedCategory = CategoryFixture.GetCategory(true);
-        MakeUpdateIfValidAsyncReturns(CategoryUpdateOutcome.NotFound);
         // Act
         Result result = await _sut.Handle(expectedCategory.ToUpdateCommand(), _ct);
-        await _categoryRepository.Received(1).UpdateIfValidAsync(Arg.Any<Category>(), _ct);
         // Assert
         result.IsSuccess.ShouldBeFalse();
         result.Error.ShouldBe(CategoryErrors.NotFound(expectedCategory.Id.ToString()));
@@ -49,18 +45,15 @@ public class UpdateCategoryHandlerTests
     public async Task Handle_WhenTheCategoryNameExists_ShouldReturnFailure()
     {
         // Arrange
-        Category expectedCategory = CategoryFixture.GetCategory(true);
-        MakeUpdateIfValidAsyncReturns(CategoryUpdateOutcome.NameConflict);
+        List<Category> categories = CategoryFixture.GetCategories(2, true);
+        await SeedRangeAsync(categories);
+        Category category1 = categories.First();
+        Category categoryToCreate = categories[1];
+        categoryToCreate.SetName(category1.Name);
         // Act
-        Result result = await _sut.Handle(expectedCategory.ToUpdateCommand(), _ct);
-        await _categoryRepository.Received(1).UpdateIfValidAsync(Arg.Any<Category>(), _ct);
+        Result result = await _sut.Handle(categoryToCreate.ToUpdateCommand(), _ct);
         // Assert
         result.IsFailure.ShouldBeTrue();
         result.Error.ShouldBe(CategoryErrors.NameAlreadyExists);
-    }
-
-    private void MakeUpdateIfValidAsyncReturns(CategoryUpdateOutcome returnValue)
-    {
-        _categoryRepository.UpdateIfValidAsync(Arg.Any<Category>(), _ct).Returns(returnValue);
     }
 }

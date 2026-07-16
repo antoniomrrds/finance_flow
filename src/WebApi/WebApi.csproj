@@ -19,8 +19,4 @@
   <ItemGroup>
     <ProjectReference Include="..\SharedKernel\SharedKernel.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Application\Abstractions\" />
-    <Folder Include="Infrastructure\Persistence\" />
-  </ItemGroup>
 </Project>

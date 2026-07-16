@@ -1,14 +1,12 @@
 using FluentValidation;
-using SharedKernel;
-using WebApi.Application.Abstractions.Messaging;
+using WebApi.Configuration;
+using WebApi.Configuration.Docs;
 using WebApi.Domain.Categories;
-using WebApi.Endpoints;
-using WebApi.Extensions;
-using WebApi.Extensions.Docs;
-using WebApi.Features.Categories.Common;
+using WebApi.Features.Abstractions.Data;
+using WebApi.Features.Categories.Shared;
 using WebApi.Infrastructure.Http;
 
-namespace WebApi.Features.Categories.update;
+namespace WebApi.Features.Categories.Update;
 
 public static class UpdateCategory
 {
@@ -65,7 +63,7 @@ public static class UpdateCategory
         }
     }
 
-    public sealed class Handler(ICategoryRepository repo) : ICommandHandler<Command>
+    public sealed class Handler(IApplicationDbContext context) : ICommandHandler<Command>
     {
         public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
         {
@@ -74,17 +72,35 @@ public static class UpdateCategory
                 name: command.Name,
                 description: command.Description
             );
-            CategoryUpdateOutcome result = await repo.UpdateIfValidAsync(
-                category,
+
+            int affectedRows = await context
+                .Categories.Where(c => c.Id == category.Id)
+                .Where(c =>
+                    !context.Categories.Any(other =>
+                        other.Id != category.Id && other.Name == category.Name
+                    )
+                )
+                .ExecuteUpdateAsync(
+                    setters =>
+                        setters
+                            .SetProperty(c => c.Name, category.Name)
+                            .SetProperty(c => c.Description, category.Description),
+                    cancellationToken
+                );
+
+            if (affectedRows > 0)
+            {
+                return Result.Success();
+            }
+
+            bool exists = await context.Categories.AnyAsync(
+                c => c.Id == category.Id,
                 cancellationToken
             );
 
-            return result switch
-            {
-                CategoryUpdateOutcome.NotFound => CategoryErrors.NotFound(category.Id.ToString()),
-                CategoryUpdateOutcome.NameConflict => CategoryErrors.NameAlreadyExists,
-                _ => Result.Success(),
-            };
+            return exists
+                ? CategoryErrors.NameAlreadyExists
+                : CategoryErrors.NotFound(category.Id.ToString());
         }
     }
 }

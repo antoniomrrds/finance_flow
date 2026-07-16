@@ -1,5 +1,3 @@
-using SharedKernel;
-
 namespace WebApi.Domain.Categories;
 
 internal static class CategoryErrorCodes

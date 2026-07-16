@@ -1,11 +1,9 @@
 using FluentValidation;
-using SharedKernel;
-using WebApi.Application.Abstractions.Messaging;
+using WebApi.Configuration;
+using WebApi.Configuration.Docs;
 using WebApi.Domain.Categories;
-using WebApi.Endpoints;
-using WebApi.Extensions;
-using WebApi.Extensions.Docs;
-using WebApi.Features.Categories.Common;
+using WebApi.Features.Abstractions.Data;
+using WebApi.Features.Categories.Shared;
 using WebApi.Infrastructure.Http;
 
 namespace WebApi.Features.Categories.Delete;
@@ -47,11 +45,14 @@ public static class DeleteCategory
         }
     }
 
-    public sealed class Handler(ICategoryRepository categoryRepository) : ICommandHandler<Command>
+    public sealed class Handler(IApplicationDbContext context) : ICommandHandler<Command>
     {
         public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
         {
-            bool result = await categoryRepository.DeleteAsync(command.Id, cancellationToken);
+            bool result =
+                await context
+                    .Categories.Where(c => c.Id == command.Id)
+                    .ExecuteDeleteAsync(cancellationToken: cancellationToken) > 0;
             return result ? Result.Success() : CategoryErrors.NotFound(command.Id.ToString());
         }
     }

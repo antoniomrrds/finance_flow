@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using WebApi.Infrastructure.Persistence.Data;
+using WebApi.Infrastructure.Data;
 
 namespace WebApi.Tests.Infrastructure.Factories;
 

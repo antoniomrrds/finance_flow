@@ -1,10 +1,8 @@
-using SharedKernel;
-using WebApi.Application.Abstractions.Messaging;
+using WebApi.Configuration;
+using WebApi.Configuration.Docs;
 using WebApi.Domain.Categories;
-using WebApi.Endpoints;
-using WebApi.Extensions;
-using WebApi.Extensions.Docs;
-using WebApi.Features.Categories.Common;
+using WebApi.Features.Abstractions.Data;
+using WebApi.Features.Categories.Shared;
 using WebApi.Infrastructure.Http;
 
 namespace WebApi.Features.Categories.GetById;
@@ -13,7 +11,7 @@ public static class GetCategoryById
 {
     public sealed record Query(Guid Id) : IQuery<Response>;
 
-    public sealed record Response
+    public sealed record Response : ICategoryResponse
     {
         public Guid Id { get; init; }
 
@@ -48,26 +46,17 @@ public static class GetCategoryById
         }
     }
 
-    internal sealed class Handler(ICategoryRepository repo) : IQueryHandler<Query, Response>
+    internal sealed class Handler(IApplicationDbContext context) : IQueryHandler<Query, Response>
     {
         public async Task<Result<Response>> Handle(Query query, CancellationToken cancellationToken)
         {
-            Category? category = await repo.GetByIdAsync(query.Id, cancellationToken);
-            return category is null
-                ? CategoryErrors.NotFound(id: query.Id.ToString())
-                : category.ToResponse();
+            Response? category = await context
+                .Categories.AsNoTracking()
+                .Where(c => c.Id == query.Id)
+                .Select(CategoryMappings.ToResponseExpression<Response>())
+                .SingleOrDefaultAsync(cancellationToken);
+
+            return category is null ? CategoryErrors.NotFound(id: query.Id.ToString()) : category;
         }
     }
-}
-
-public static class CategoryExtension
-{
-    public static GetCategoryById.Response ToResponse(this Category category) =>
-        new()
-        {
-            Id = category.Id,
-            Name = category.Name,
-            Description = category.Description ?? string.Empty,
-            CreatedAt = category.CreatedAt,
-        };
 }
